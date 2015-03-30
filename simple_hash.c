@@ -276,8 +276,6 @@ unsigned long int sh_hash(char *key, size_t key_len){
     unsigned long int old_hash = 0;
     /* our iterator through the key */
     size_t i = 0;
-    /* the maximum number of characters we can pack into an unsigned long int */
-    size_t max_pack_num = sizeof(unsigned long int);
 
     if( ! key ){
         puts("sh_hash: key undef");
@@ -310,12 +308,6 @@ unsigned long int sh_hash(char *key, size_t key_len){
 #ifdef DEBUG
     printf("sh_hash: looking at i '%zd', char '%c'\n", i, key[i]);
 #endif
-        /* stop if we have packed as many characters as we can into our hash */
-        if( i > max_pack_num ){
-            printf("sh_hash: max_pack_num exceeded for string '%s'\n", key);
-            break;
-        }
-
         /* stop if we have hit max */
         if( hash == ULONG_MAX ){
             break;
@@ -330,10 +322,10 @@ unsigned long int sh_hash(char *key, size_t key_len){
         old_hash = hash;
 
         /* hash this character
-         * FIXME smarter hashing algorithm
+         * http://www.cse.yorku.ca/~oz/hash.html
+         * djb2
          */
-        hash = hash << 8;
-        hash += key[i];
+        hash = ((hash << 5) + hash) + key[i];
     }
 
 #ifdef DEBUG
