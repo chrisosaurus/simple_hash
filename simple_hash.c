@@ -290,7 +290,8 @@ unsigned int sh_init(struct sh_table *table, size_t size){
         return 0;
     }
 
-    table->size = size;
+    table->size    = size;
+    table->n_elems = 0;
 
     /* calloc our buckets (pointer to sh_entry) */
     table->entries = calloc(size, sizeof(struct sh_entry *));

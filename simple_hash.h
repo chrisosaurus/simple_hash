@@ -21,6 +21,8 @@ struct sh_entry {
 struct sh_table {
     /* number of slots in hash */
     size_t size;
+    /* number of elements stored in hash */
+    size_t n_elems;
     /* array of pointers to the first bucket in each slot */
     struct sh_entry **entries;
 };
