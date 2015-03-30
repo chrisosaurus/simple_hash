@@ -591,7 +591,7 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
     ++table->n_elems;
 
     /* return success */
-    return 0;
+    return 1;
 }
 
 /* set `data` under `key`
