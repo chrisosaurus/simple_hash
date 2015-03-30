@@ -1,5 +1,4 @@
-Simple hash
-===========
+# Simple hash [![Coverage Status](https://coveralls.io/repos/mkfifo/simple_hash/badge.svg)](https://coveralls.io/r/mkfifo/simple_hash)
 
 A simple implementation of a hash table written in pure C99 with no external dependencies
 
