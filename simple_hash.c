@@ -449,6 +449,11 @@ unsigned int sh_init(struct sh_table *table, size_t size){
         return 0;
     }
 
+    if( size == 0 ){
+        puts("sh_init: specified size of 0, impossible");
+        return 0;
+    }
+
     table->size    = size;
     table->n_elems = 0;
 
