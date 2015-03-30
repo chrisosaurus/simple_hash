@@ -23,33 +23,42 @@ void new_insert_get_destroy(void){
     int *data = 0;
 
 
+    puts("testing new");
     table = sh_new(32);
     assert(table);
     assert( 32 == table->size );
     assert( 0 == table->n_elems );
 
+
+    puts("testing insert and get");
+    puts("one insert");
     assert( sh_insert(table, key_1, &data_1) );
     assert( 1 == table->n_elems );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
 
+    puts("one get");
     data = sh_get(table, key_1);
     assert(data);
     assert( data_1 == *data );
 
 
+    puts("two insert");
     assert( sh_insert(table, key_2, &data_2) );
     assert( 2 == table->n_elems );
     assert( 0 == sh_get(table, key_3) );
 
+    puts("two get");
     data = sh_get(table, key_2);
     assert(data);
     assert( data_2 == *data );
 
 
+    puts("three insert");
     assert( sh_insert(table, key_3, &data_3) );
     assert( 3 == table->n_elems );
 
+    puts("three get");
     data = sh_get(table, key_3);
     assert(data);
     assert( data_3 == *data );

@@ -295,6 +295,9 @@ unsigned long int sh_hash(char *key, size_t key_len){
         key_len = strlen(key);
     }
 
+#ifdef DEBUG
+    printf("sh_hash: hashing string '%s'\n", key);
+#endif
 
     /* C99 section 6.2.5.9 page 34:
      * A computation involving unsigned operands can never overﬂow,
@@ -307,6 +310,9 @@ unsigned long int sh_hash(char *key, size_t key_len){
     /* hashing time */
     for( i=0; i < key_len; ++i ){
 
+#ifdef DEBUG
+    printf("sh_hash: looking at i '%zd', char '%c'\n", i, key[i]);
+#endif
         /* stop if we have packed as many characters as we can into our hash */
         if( i > max_pack_num ){
             printf("sh_hash: max_pack_num exceeded for string '%s'\n", key);
@@ -333,6 +339,9 @@ unsigned long int sh_hash(char *key, size_t key_len){
         hash += key[i];
     }
 
+#ifdef DEBUG
+    puts("sh_hash: success");
+#endif
     return hash;
 }
 
@@ -486,6 +495,10 @@ unsigned int sh_exists(struct sh_table *table, char *key){
         return 0;
     }
 
+#ifdef DEBUG
+    printf("sh_exist: called with key '%s', dispatching to sh_find_entry\n", key);
+#endif
+
     /* find entry */
     she = sh_find_entry(table, key);
     if( ! she ){
@@ -523,7 +536,15 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
         return 0;
     }
 
+#ifdef DEBUG
+    printf("sh_insert: asked to insert for key '%s'\n", key);
+#endif
+
     /* we allow data to be 0 */
+
+#ifdef DEBUG
+    puts("sh_insert: calling sh_exists");
+#endif
 
     /* check for already existing key
      * insert only works if the key is not already present
@@ -544,6 +565,10 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
      * so sh_pos cannot fail
      */
     pos = sh_pos(table, hash);
+
+#ifdef DEBUG
+    puts("sh_insert: calling sh_entry_new");
+#endif
 
     /* construct our new sh_entry
      * sh_entry_new(unsigned long int hash,
