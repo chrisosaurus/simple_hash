@@ -17,9 +17,7 @@
  * returns char* to new memory containing a strcpy on success
  * returns 0 on error
  */
-static char * sh_strdup(char *str){
-    /* cache of strlen */
-    size_t len = 0;
+static char * sh_strdupn(char *str, size_t len){
     /* our new string */
     char *new_str = 0;
 
@@ -28,8 +26,13 @@ static char * sh_strdup(char *str){
         return 0;
     }
 
-    /* capture our length */
-    len = strlen(str);
+    /* if len is 0 issue a warning and recalculate
+     * note that if strlen is still 0 then all is well
+     */
+    if( len == 0 ){
+        puts("sh_strdup: provided len was 0, recalculating");
+        len = strlen(str);
+    }
 
     /* allocate our new string
      * len + 1 to fit null terminator
