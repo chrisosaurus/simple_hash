@@ -115,10 +115,10 @@ void * sh_get(struct sh_table *table, char *key);
 
 /* delete entry stored under `key`
  *
- * returns 1 on success
+ * returns data on success
  * returns 0 on error
  */
-unsigned int sh_delete(struct sh_table *table, char *key);
+void *  sh_delete(struct sh_table *table, char *key);
 
 
 #endif // ifndef SIMPLE_HASH_H

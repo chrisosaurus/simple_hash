@@ -150,6 +150,33 @@ static struct sh_entry * sh_entry_new(unsigned long int hash,
     return she;
 }
 
+/* destroy entry
+ *
+ * will only free *data if `free_data` is 1
+ * will NOT free *next
+ * will free all other values
+ *
+ * will free provided *entry if `free_entry` is 1
+ */
+static void sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, unsigned int free_data){
+    if( ! entry ){
+        puts("sh_entry_destroy: entry undef");
+        return;
+    }
+
+    if( free_data ){
+        free(entry->data);
+    }
+
+    /* free key as strdup */
+    free(entry->key);
+
+    /* free entry if asked */
+    if( free_entry ){
+        free(entry);
+    }
+}
+
 
 /* find the sh_entry that should be holding this key
  *
@@ -493,11 +520,104 @@ void * sh_get(struct sh_table *table, char *key){
 
 /* delete entry stored under `key`
  *
- * returns 1 on success
+ * returns data on success
  * returns 0 on error
  */
-unsigned int sh_delete(struct sh_table *table, char *key){
-    puts("sh_delete: unimplemented");
+void * sh_delete(struct sh_table *table, char *key){
+    /* our cur entry */
+    struct sh_entry *cur = 0;
+    /* the pointer where we store our next
+     * this will either be:
+     *      &( table->entries[pos] )
+     *      &( previous->next )
+     *
+     * where previous was the previous sh_entry we considered
+     */
+    struct sh_entry **prev = 0;
+
+    /* hash */
+    unsigned long int hash = 0;
+    /* position in hash table */
+    size_t pos = 0;
+    /* cached strlen */
+    size_t key_len = 0;
+
+    /* our old data */
+    void *old_data = 0;
+
+    if( ! table ){
+        puts("sh_delete: table undef");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_delete: key undef");
+        return 0;
+    }
+
+    /* if we do not have this key then we consider this a failure */
+    if( ! sh_exists(table, key) ){
+        puts("sh_delete: key did not exist");
+        return 0;
+    }
+
+    /* cache strlen */
+    key_len = strlen(key);
+
+    /* calculate hash */
+    hash = sh_hash(key, key_len);
+
+    /* calculate pos
+     * we know table is defined here
+     * so sh_pos cannot fail
+     */
+    pos = sh_pos(table, hash);
+
+
+    /* iterate through bucket considering each entry
+     * the only tricky part here is the prev pointer
+     * which is the position where we save our next
+     * to ensure the linked list of entries remains intact
+     */
+    prev = &( table->entries[pos] );
+    for( cur = table->entries[pos];
+         cur;
+         prev = &(cur->next), cur = cur->next ){
+
+        if( cur->hash != hash ){
+            continue;
+        }
+
+        if( cur->key_len != key_len ){
+            continue;
+        }
+
+        if( strncmp(key, cur->key, key_len) ){
+            continue;
+        }
+
+        /* save old data pointer */
+        old_data = cur->data;
+
+        /* decrement number of elements */
+        --table->n_elems;
+
+        /* capture next
+         * to ensure continuation of linked list
+         */
+        *prev = cur->next;
+
+        /* free element and contents
+         * do NOT free data, leave that up to caller
+         */
+        sh_entry_destroy(cur, 1, 0);
+
+        /* return old data */
+        return old_data;
+    }
+
+    /* failed to find element */
+    puts("sh_delete: failed to find key");
     return 0;
 }
 
