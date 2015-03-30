@@ -151,6 +151,16 @@ static struct sh_entry * sh_entry_new(unsigned long int hash,
 }
 
 
+/* find the sh_entry that should be holding this key
+ *
+ * returns a pointer to it on success
+ * return 0 on failure
+ */
+static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
+    puts("sh_find_entry: unimplemented");
+    return 0;
+}
+
 
 
 /**********************************************
