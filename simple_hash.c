@@ -319,8 +319,27 @@ unsigned int sh_resize(struct sh_table *table, size_t new_size){
  * returns 0 if key doesn't exist or on error
  */
 unsigned int sh_exists(struct sh_table *table, char *key){
-    puts("unimplemented");
-    return 0;
+    struct sh_entry *she = 0;
+
+    if( ! table ){
+        puts("sh_exists: table undef");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_exists: key undef");
+        return 0;
+    }
+
+    /* find entry */
+    she = sh_find_entry(table, key);
+    if( ! she ){
+        /* not found */
+        return 0;
+    }
+
+    /* found */
+    return 1;
 }
 
 /* insert `data` under `key`
