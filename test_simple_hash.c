@@ -139,6 +139,7 @@ void set(void){
     data = sh_set(table, key_2, &new_data_2);
     assert(data);
     assert( *data == data_2 );
+    assert( 3 == table->n_elems );
 
     data = sh_get(table, key_2);
     assert(data);
@@ -148,6 +149,7 @@ void set(void){
     data = sh_set(table, key_3, &new_data_3);
     assert(data);
     assert( *data == data_3 );
+    assert( 3 == table->n_elems );
 
     data = sh_get(table, key_3);
     assert(data);
@@ -157,12 +159,11 @@ void set(void){
     data = sh_set(table, key_1, &new_data_1);
     assert(data);
     assert( *data == data_1 );
+    assert( 3 == table->n_elems );
 
     data = sh_get(table, key_1);
     assert(data);
     assert( *data == new_data_1 );
-
-
 
 
     assert( sh_destroy(table, 1, 0) );
@@ -227,6 +228,7 @@ void delete(void){
     data = sh_delete(table, key_1);
     assert(data);
     assert(*data == data_1);
+    assert( 2 == table->n_elems );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_1);
@@ -237,6 +239,7 @@ void delete(void){
     data = sh_delete(table, key_3);
     assert(data);
     assert(*data == data_3);
+    assert( 1 == table->n_elems );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_3);
@@ -247,6 +250,7 @@ void delete(void){
     data = sh_delete(table, key_2);
     assert(data);
     assert(*data == data_2);
+    assert( 0 == table->n_elems );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_2);
@@ -351,6 +355,7 @@ void collision(void){
     assert(data);
     assert( data_9 == *data );
 
+    assert( 9 == table->n_elems );
 
     puts("testing we can still get everything out");
 
@@ -396,6 +401,7 @@ void collision(void){
     data = sh_delete(table, key_1);
     assert(data);
     assert(*data == data_1);
+    assert( 8 == table->n_elems );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_1);
@@ -405,6 +411,7 @@ void collision(void){
     data = sh_delete(table, key_3);
     assert(data);
     assert(*data == data_3);
+    assert( 7 == table->n_elems );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_3);
@@ -414,6 +421,7 @@ void collision(void){
     data = sh_delete(table, key_2);
     assert(data);
     assert(*data == data_2);
+    assert( 6 == table->n_elems );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_2);
