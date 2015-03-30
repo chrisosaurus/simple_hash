@@ -18,8 +18,41 @@
  * returns 0 on error
  */
 static char * sh_strdup(char *str){
-    puts("unimplemented");
-    return 0;
+    /* cache of strlen */
+    size_t len = 0;
+    /* our new string */
+    char *new_str = 0;
+
+    if( ! str ){
+        puts("sh_strdup: str undef");
+        return 0;
+    }
+
+    /* capture our length */
+    len = strlen(str);
+
+    /* allocate our new string
+     * len + 1 to fit null terminator
+     */
+    new_str = calloc(len + 1, sizeof(char));
+    if( ! new_str ){
+        puts("sh_strdup: call to calloc failed");
+        return 0;
+    }
+
+    /* perform copy */
+    if( ! strncpy(new_str, str, len) ){
+        puts("sh_strdup: call to strncpy failed");
+        return 0;
+    }
+
+    /* ensure null terminator
+     * do not rely on calloc as we may switch
+     * to alt. alloc. later
+     */
+    new_str[len] = '\0';
+
+    return new_str;
 }
 
 /* takes a char* representing a string
