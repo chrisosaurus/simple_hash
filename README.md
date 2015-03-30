@@ -7,7 +7,9 @@ Simple hash is licensed under the MIT license, see LICENSE for more details
 Hashing function
 ----------------
 
-simple_hash uses an implementation of djb2 found on [http://www.cse.yorku.ca/~oz/hash.html](http://www.cse.yorku.ca/~oz/hash.html)
+simple_hash uses an implementation of djb2,
+below is the reference implementation which can also be
+found on [http://www.cse.yorku.ca/~oz/hash.html](http://www.cse.yorku.ca/~oz/hash.html)
 
     unsigned long
     hash(unsigned char *str)
