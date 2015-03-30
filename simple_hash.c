@@ -219,14 +219,54 @@ struct sh_table * sh_new(size_t size){
  * this will free all the sh entries stored
  * this will free all the keys (as they are strdup-ed)
  *
+ * this will only free the *table pointer if `free_table` is set to 1
  * this will only free the *data pointers if `free_data` is set to 1
  *
  * returns 1 on success
  * returns 0 on error
  */
-unsigned int sh_destroy(struct sh_table *table, unsigned int free_data){
-    puts("unimplemented");
-    return 0;
+unsigned int sh_destroy(struct sh_table *table, unsigned int free_table, unsigned int free_data){
+    /* iterator through table */
+    size_t i = 0;
+    /* current entry */
+    struct sh_entry *cur_she = 0;
+    /* next entry to consider */
+    struct sh_entry *next_she = 0;
+
+    if( ! table ){
+        puts("sh_destroy: table undef");
+        return 0;
+    }
+
+    /* iterate through `entries` list
+     * and then iterate through each entry within it
+     * freeing them and their appropriate parts
+     */
+    for( i=0; i < table->size; ++i ){
+        next_she = table->entries[i];
+        while( next_she ){
+            cur_she = next_she;
+            next_she = next_she->next;
+
+            /* always free key as it is strdupn-ed */
+            free(cur_she->key);
+
+            /* only free data if we are asked to */
+            if( free_data ){
+                free(cur_she->data);
+            }
+        }
+    }
+
+    /* free entires table */
+    free(table->entries);
+
+    /* finally free table if asked to */
+    if( free_table ){
+        free(table);
+    }
+
+    return 1;
 }
 
 /* initialise an already allocated sh_table to size size

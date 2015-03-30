@@ -55,12 +55,13 @@ struct sh_table * sh_new(size_t size);
  * this will free all the sh entries stored
  * this will free all the keys (as they are strdup-ed)
  *
+ * this will only free the *table pointer if `free_table` is set to 1
  * this will only free the *data pointers if `free_data` is set to 1
  *
  * returns 1 on success
  * returns 0 on error
  */
-unsigned int sh_destroy(struct sh_table *table, unsigned int free_data);
+unsigned int sh_destroy(struct sh_table *table, unsigned int free_table, unsigned int free_data);
 
 /* initialise an already allocated sh_table to size size
  *

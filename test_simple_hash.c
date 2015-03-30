@@ -51,7 +51,7 @@ void new_insert_get_destroy(void){
     assert( data_3 == *data );
 
 
-    assert( sh_destroy(table, 0) );
+    assert( sh_destroy(table, 1, 0) );
 
 
 
