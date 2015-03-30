@@ -12,6 +12,15 @@
 /* ignore unused function warnings */
 #pragma GCC diagnostic ignored "-Wunused-function"
 
+
+/**********************************************
+ **********************************************
+ **********************************************
+ ******** simple helper functions *************
+ **********************************************
+ **********************************************
+ ***********************************************/
+
 /* internal strdup equivalent
  *
  * returns char* to new memory containing a strcpy on success
@@ -57,6 +66,101 @@ static char * sh_strdupn(char *str, size_t len){
 
     return new_str;
 }
+
+/* initialise an existing sh_entry
+ *
+ * returns 1 on success
+ * returns 0 on error
+ */
+static unsigned int sh_entry_init(struct sh_entry *entry,
+                                  unsigned long int hash,
+                                  char *key,
+                                  size_t key_len,
+                                  void *data,
+                                  struct sh_entry *next){
+
+    if( ! entry ){
+        puts("sh_entry_init: entry was null");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_entry_init: key was null");
+        return 0;
+    }
+
+    /* we allow data to be null */
+
+    /* we allow next to be null */
+
+    /* if hash is 0 we issue a warning and recalculate */
+    if( hash == 0 ){
+        puts("warning sh_entry_init: provided hash was 0, recalculating");
+        hash = sh_hash(key);
+    }
+
+    /* if key_len is 0 we issue a warning and recalcualte */
+    if( key_len == 0 ){
+        puts("warning sh_entry_init: provided key_lenb was 0, recalcuating");
+        key_len = strlen(key);
+    }
+
+    /* setup our simple fields */
+    entry->hash    = hash;
+    entry->key_len = key_len;
+    entry->data    = data;
+    entry->next    = next;
+
+    /* we duplicate the string */
+    entry->key = sh_strdupn(key, key_len);
+    if( ! entry->key ){
+        puts("sh_entry_init: call to sh_strdup failed");
+        return 0;
+    }
+
+    /* return success */
+    return 1;
+}
+
+/* allocate and initialise a new sh_entry
+ *
+ * returns pointer on success
+ * returns 0 on failure
+ */
+static struct sh_entry * sh_entry_new(unsigned long int hash,
+                                      char *key,
+                                      size_t key_len,
+                                      void *data,
+                                      struct sh_entry *next){
+    struct sh_entry *she = 0;
+
+    /* alloc */
+    she = calloc(1, sizeof(struct sh_entry));
+    if( ! she ){
+        puts("sh_entry_new: call to calloc failed");
+        return 0;
+    }
+
+    /* init */
+    if( ! sh_entry_init(she, hash, key, key_len, data, next) ){
+        puts("sh_entry_new: call to sh_entry_init failed");
+        return 0;
+    }
+
+    return she;
+}
+
+
+
+
+/**********************************************
+ **********************************************
+ **********************************************
+ ******** simple_hash.h implementation ********
+ **********************************************
+ **********************************************
+ ***********************************************/
+
 
 /* takes a char* representing a string
  *
