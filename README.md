@@ -38,6 +38,9 @@ Example usage
         if( sh_exists(t, "hello") ){
         }
 
+        /* resize hash */
+        sh_resize(t, 64);
+
         /* tidy up
          * free table
          * but do not free stored data
