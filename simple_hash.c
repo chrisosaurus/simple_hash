@@ -484,6 +484,11 @@ unsigned int sh_resize(struct sh_table *table, size_t new_size){
     /* our new position for each element */
     size_t new_pos = 0;
 
+    if( ! table ){
+        puts("sh_resize: table was null");
+        return 0;
+    }
+
     if( new_size == 0 ){
         puts("sh_resize: asked for new_size of 0, impossible");
         return 0;
