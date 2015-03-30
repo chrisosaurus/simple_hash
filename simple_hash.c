@@ -178,7 +178,7 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
  * returns 0 on error
  */
 unsigned long int sh_hash(char *key){
-    puts("unimplemented");
+    puts("sh_hash: unimplemented");
     return 0;
 }
 
@@ -310,7 +310,7 @@ unsigned int sh_init(struct sh_table *table, size_t size){
  * returns 0 on error
  */
 unsigned int sh_resize(struct sh_table *table, size_t new_size){
-    puts("unimplemented");
+    puts("sh_resize unimplemented");
     return 0;
 }
 
@@ -350,7 +350,7 @@ unsigned int sh_exists(struct sh_table *table, char *key){
  * returns 0 on error
  */
 unsigned int sh_insert(struct sh_table *table, char *key, void *data){
-    puts("unimplemented");
+    puts("sh_insert: unimplemented");
     return 0;
 }
 
@@ -428,7 +428,7 @@ void * sh_get(struct sh_table *table, char *key){
  * returns 0 on error
  */
 unsigned int sh_delete(struct sh_table *table, char *key){
-    puts("unimplemented");
+    puts("sh_delete: unimplemented");
     return 0;
 }
 
