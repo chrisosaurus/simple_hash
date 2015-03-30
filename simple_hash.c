@@ -360,8 +360,36 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
  * returns 0 on error
  */
 void * sh_set(struct sh_table *table, char *key, void *data){
-    puts("unimplemented");
-    return 0;
+    struct sh_entry *she = 0;
+    void * old_data = 0;
+
+    if( ! table ){
+        puts("sh_get: table undef");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_get: key undef");
+        return 0;
+    }
+
+    /* allow data to be null */
+
+    /* find entry */
+    she = sh_find_entry(table, key);
+    if( ! she ){
+        /* not found */
+        return 0;
+    }
+
+    /* save old data */
+    old_data = she->data;
+
+    /* overwrite */
+    she->data = data;
+
+    /* return old data */
+    return old_data;
 }
 
 /* get `data` stored under `key`
