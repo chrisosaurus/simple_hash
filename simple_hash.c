@@ -205,12 +205,6 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
         return 0;
     }
 
-    /* if we do not have this key then we consider this a failure */
-    if( ! sh_exists(table, key) ){
-        puts("sh_find_entry: key did not exist");
-        return 0;
-    }
-
     /* cache strlen */
     key_len = strlen(key);
 
