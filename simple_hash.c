@@ -473,8 +473,62 @@ unsigned int sh_init(struct sh_table *table, size_t size){
  * returns 0 on error
  */
 unsigned int sh_resize(struct sh_table *table, size_t new_size){
-    puts("sh_resize unimplemented");
-    return 0;
+    /* our new data area */
+    struct sh_entry **new_entries = 0;
+    /* the current entry we are copying across */
+    struct sh_entry *cur = 0;
+    /* next entry, as we modify next pointers */
+    struct sh_entry *next = 0;
+    /* our iterator through the old hash */
+    size_t i = 0;
+    /* our new position for each element */
+    size_t new_pos = 0;
+
+    if( new_size == 0 ){
+        puts("sh_resize: asked for new_size of 0, impossible");
+        return 0;
+    }
+
+    /* allocate a new array of pointers to sh_entry */
+    new_entries = calloc(new_size, sizeof(struct sh_entry *));
+    if( ! new_entries ){
+        puts("sh_resize: call to calloc failed");
+        return 0;
+    }
+
+    /* iterate through old data */
+    for( i=0; i < table->size; ++i ){
+
+        /* we have to keep the current entry and the next
+         * as once we copy over the cur we will lose cur->next
+         */
+        for( cur = table->entries[i];
+             cur;
+             cur = next ){
+
+            next = 0;
+            if( cur ){
+                next = cur->next;
+            }
+
+            /* our position within new entries */
+            new_pos = sh_pos(cur->hash, new_size);
+
+            /* insert making sure to set next correctly */
+            cur->next = new_entries[new_pos];
+            new_entries[new_pos] = cur;
+        }
+
+    }
+
+    /* free old data */
+    free(table->entries);
+
+    /* swap */
+    table->size = new_size;
+    table->entries = new_entries;
+
+    return 1;
 }
 
 /* check if the supplied key already exists in this hash

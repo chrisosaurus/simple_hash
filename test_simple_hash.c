@@ -455,6 +455,80 @@ void collision(void){
 
     assert( sh_destroy(table, 1, 0) );
 }
+
+void resize(void){
+    /* our simple hash table */
+    struct sh_table *table = 0;
+
+    /* some keys */
+    char *key_1 = "bbbbb";
+    char *key_2 = "aaaaa";
+    char *key_3 = "ccccc";
+
+    /* some data */
+    int data_1 = 1;
+    int data_2 = 2;
+    int data_3 = 3;
+
+    /* temporary data pointer used for testing get */
+    int *data = 0;
+
+
+    puts("\ntesting resize functionality");
+
+    puts("creating table");
+    table = sh_new(3);
+    assert(table);
+    assert( 3 == table->size );
+    assert( 0 == table->n_elems );
+
+
+    puts("inserting some data");
+    assert( sh_insert(table, key_1, &data_1) );
+    assert( 1 == table->n_elems );
+    assert( 0 == sh_get(table, key_2) );
+    assert( 0 == sh_get(table, key_3) );
+    data = sh_get(table, key_1);
+    assert(data);
+    assert( data_1 == *data );
+
+
+    assert( sh_insert(table, key_2, &data_2) );
+    assert( 2 == table->n_elems );
+    assert( 0 == sh_get(table, key_3) );
+    data = sh_get(table, key_2);
+    assert(data);
+    assert( data_2 == *data );
+
+
+    assert( sh_insert(table, key_3, &data_3) );
+    assert( 3 == table->n_elems );
+    data = sh_get(table, key_3);
+    assert(data);
+    assert( data_3 == *data );
+
+
+    puts("testing resize");
+    assert( sh_resize(table, 10) );
+    assert( 3  == table->n_elems );
+    assert( 10 == table->size );
+
+    puts("testing we can still fetch all the old values");
+    data = sh_get(table, key_3);
+    assert(data);
+    assert( data_3 == *data );
+
+    data = sh_get(table, key_2);
+    assert(data);
+    assert( data_2 == *data );
+
+    data = sh_get(table, key_1);
+    assert(data);
+    assert( data_1 == *data );
+
+    assert( sh_destroy(table, 1, 0) );
+}
+
 int main(void){
     new_insert_get_destroy();
 
@@ -463,6 +537,8 @@ int main(void){
     delete();
 
     collision();
+
+    resize();
 
     puts("\nsuccess!");
 
