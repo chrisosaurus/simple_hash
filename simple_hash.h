@@ -29,11 +29,14 @@ struct sh_table {
 
 
 /* takes a char* representing a string
+ * and a key_len of it's size
+ *
+ * will recalculate key_len if 0
  *
  * returns an unsigned long integer hash value on success
  * returns 0 on error
  */
-unsigned long int sh_hash(char *key);
+unsigned long int sh_hash(char *key, size_t key_len);
 
 /* takes a table and a hash value
  *

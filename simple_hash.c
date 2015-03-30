@@ -93,16 +93,16 @@ static unsigned int sh_entry_init(struct sh_entry *entry,
 
     /* we allow next to be null */
 
-    /* if hash is 0 we issue a warning and recalculate */
-    if( hash == 0 ){
-        puts("warning sh_entry_init: provided hash was 0, recalculating");
-        hash = sh_hash(key);
-    }
-
     /* if key_len is 0 we issue a warning and recalcualte */
     if( key_len == 0 ){
         puts("warning sh_entry_init: provided key_lenb was 0, recalcuating");
         key_len = strlen(key);
+    }
+
+    /* if hash is 0 we issue a warning and recalculate */
+    if( hash == 0 ){
+        puts("warning sh_entry_init: provided hash was 0, recalculating");
+        hash = sh_hash(key, key_len);
     }
 
     /* setup our simple fields */
@@ -174,10 +174,12 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
 
 /* takes a char* representing a string
  *
+ * will recalculate key_len if 0
+ *
  * returns an unsigned long integer hash value on success
  * returns 0 on error
  */
-unsigned long int sh_hash(char *key){
+unsigned long int sh_hash(char *key, size_t key_len){
     puts("sh_hash: unimplemented");
     return 0;
 }
@@ -383,7 +385,7 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
     key_len = strlen(key);
 
     /* calculate hash */
-    hash = sh_hash(key);
+    hash = sh_hash(key, key_len);
 
     /* calculate pos
      * we know table is defined here
