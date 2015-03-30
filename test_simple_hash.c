@@ -256,12 +256,205 @@ void delete(void){
     assert( sh_destroy(table, 1, 0) );
 }
 
+void collision(void){
+    /* our simple hash table */
+    struct sh_table *table = 0;
+
+    /* some keys */
+    char *key_1 = "bacon";
+    char *key_2 = "chicken";
+    char *key_3 = "pork";
+    char *key_4 = "pig";
+    char *key_5 = "lettuce";
+    char *key_6 = "beetroot";
+    char *key_7 = "chocolate";
+    char *key_8 = "frying pan";
+    char *key_9 = "a4 paper";
+
+    /* some data */
+    int data_1 = 1;
+    int data_2 = 2;
+    int data_3 = 3;
+    int data_4 = 4;
+    int data_5 = 5;
+    int data_6 = 6;
+    int data_7 = 7;
+    int data_8 = 8;
+    int data_9 = 9;
+
+    /* temporary data pointer used for testing get */
+    int *data = 0;
+
+    puts("\ntesting collision behavior ");
+
+    puts("creating a table");
+    table = sh_new(1);
+    assert(table);
+    assert( 1 == table->size );
+    assert( 0 == table->n_elems );
+
+
+    puts("inserting some data");
+    assert( sh_insert(table, key_1, &data_1) );
+    assert( 1 == table->n_elems );
+    data = sh_get(table, key_1);
+    assert(data);
+    assert( data_1 == *data );
+
+
+    assert( sh_insert(table, key_2, &data_2) );
+    assert( 2 == table->n_elems );
+    data = sh_get(table, key_2);
+    assert(data);
+    assert( data_2 == *data );
+
+
+    assert( sh_insert(table, key_3, &data_3) );
+    assert( 3 == table->n_elems );
+    data = sh_get(table, key_3);
+    assert(data);
+    assert( data_3 == *data );
+
+    assert( sh_insert(table, key_4, &data_4) );
+    assert( 4 == table->n_elems );
+    data = sh_get(table, key_4);
+    assert(data);
+    assert( data_4 == *data );
+
+    assert( sh_insert(table, key_5, &data_5) );
+    assert( 5 == table->n_elems );
+    data = sh_get(table, key_5);
+    assert(data);
+    assert( data_5 == *data );
+
+    assert( sh_insert(table, key_6, &data_6) );
+    assert( 6 == table->n_elems );
+    data = sh_get(table, key_6);
+    assert(data);
+    assert( data_6 == *data );
+
+    assert( sh_insert(table, key_7, &data_7) );
+    assert( 7 == table->n_elems );
+    data = sh_get(table, key_7);
+    assert(data);
+    assert( data_7 == *data );
+
+    assert( sh_insert(table, key_8, &data_8) );
+    assert( 8 == table->n_elems );
+    data = sh_get(table, key_8);
+    assert(data);
+    assert( data_8 == *data );
+
+    assert( sh_insert(table, key_9, &data_9) );
+    assert( 9 == table->n_elems );
+    data = sh_get(table, key_9);
+    assert(data);
+    assert( data_9 == *data );
+
+
+    puts("testing we can still get everything out");
+
+    data = sh_get(table, key_3);
+    assert(data);
+    assert( data_3 == *data );
+
+    data = sh_get(table, key_1);
+    assert(data);
+    assert( data_1 == *data );
+
+    data = sh_get(table, key_2);
+    assert(data);
+    assert( data_2 == *data );
+
+    data = sh_get(table, key_4);
+    assert(data);
+    assert( data_4 == *data );
+
+    data = sh_get(table, key_8);
+    assert(data);
+    assert( data_8 == *data );
+
+    data = sh_get(table, key_5);
+    assert(data);
+    assert( data_5 == *data );
+
+    data = sh_get(table, key_6);
+    assert(data);
+    assert( data_6 == *data );
+
+    data = sh_get(table, key_7);
+    assert(data);
+    assert( data_7 == *data );
+
+    data = sh_get(table, key_9);
+    assert(data);
+    assert( data_9 == *data );
+
+
+    puts("testing delete collision handling");
+
+    data = sh_delete(table, key_1);
+    assert(data);
+    assert(*data == data_1);
+
+    /* should not be able to re-delete */
+    data = sh_delete(table, key_1);
+    assert(! data);
+
+
+    data = sh_delete(table, key_3);
+    assert(data);
+    assert(*data == data_3);
+
+    /* should not be able to re-delete */
+    data = sh_delete(table, key_3);
+    assert(! data);
+
+
+    data = sh_delete(table, key_2);
+    assert(data);
+    assert(*data == data_2);
+
+    /* should not be able to re-delete */
+    data = sh_delete(table, key_2);
+    assert(! data);
+
+    puts("checking post-delete that all items that should be reachable are");
+
+    data = sh_get(table, key_5);
+    assert(data);
+    assert( data_5 == *data );
+
+    data = sh_get(table, key_8);
+    assert(data);
+    assert( data_8 == *data );
+
+    data = sh_get(table, key_4);
+    assert(data);
+    assert( data_4 == *data );
+
+    data = sh_get(table, key_6);
+    assert(data);
+    assert( data_6 == *data );
+
+    data = sh_get(table, key_9);
+    assert(data);
+    assert( data_9 == *data );
+
+    data = sh_get(table, key_7);
+    assert(data);
+    assert( data_7 == *data );
+
+    assert( sh_destroy(table, 1, 0) );
+}
 int main(void){
     new_insert_get_destroy();
 
     set();
 
     delete();
+
+    collision();
 
     puts("\nsuccess!");
 
