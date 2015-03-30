@@ -78,6 +78,8 @@ unsigned int sh_init(struct sh_table *table, size_t size);
 /* resize an existing table to new_size
  * this will reshuffle all the buckets around
  *
+ * you can use this to make a hash larger or smaller
+ *
  * returns 1 on success
  * returns 0 on error
  */
