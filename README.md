@@ -38,6 +38,10 @@ Example usage
         if( sh_exists(t, "hello") ){
         }
 
-        /* destroy(table, free_table, free_data) */
+        /* tidy up
+         * free table
+         * but do not free stored data
+         * destroy(table, free_table, free_data) */
         sh_destroy(t,     1,          0);
     }
+
