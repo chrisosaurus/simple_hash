@@ -184,7 +184,73 @@ static void sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, un
  * return 0 on failure
  */
 static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
-    puts("sh_find_entry: unimplemented");
+    /* our cur entry */
+    struct sh_entry *cur = 0;
+
+    /* hash */
+    unsigned long int hash = 0;
+    /* position in hash table */
+    size_t pos = 0;
+    /* cached strlen */
+    size_t key_len = 0;
+
+
+    if( ! table ){
+        puts("sh_find_entry: table undef");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_find_entry: key undef");
+        return 0;
+    }
+
+    /* if we do not have this key then we consider this a failure */
+    if( ! sh_exists(table, key) ){
+        puts("sh_find_entry: key did not exist");
+        return 0;
+    }
+
+    /* cache strlen */
+    key_len = strlen(key);
+
+    /* calculate hash */
+    hash = sh_hash(key, key_len);
+
+    /* calculate pos
+     * we know table is defined here
+     * so sh_pos cannot fail
+     */
+    pos = sh_pos(table, hash);
+
+
+    /* iterate through bucket considering each entry
+     * the only tricky part here is the prev pointer
+     * which is the position where we save our next
+     * to ensure the linked list of entries remains intact
+     */
+    for( cur = table->entries[pos];
+         cur;
+         cur = cur->next ){
+
+        if( cur->hash != hash ){
+            continue;
+        }
+
+        if( cur->key_len != key_len ){
+            continue;
+        }
+
+        if( strncmp(key, cur->key, key_len) ){
+            continue;
+        }
+
+        /* found it! return this entry */
+        return cur;
+    }
+
+    /* failed to find element */
+    puts("sh_find_entry: failed to find key");
     return 0;
 }
 
