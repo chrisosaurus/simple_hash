@@ -216,7 +216,7 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
      * we know table is defined here
      * so sh_pos cannot fail
      */
-    pos = sh_pos(table, hash);
+    pos = sh_pos(hash, table->size);
 
 
     /* iterate through bucket considering each entry
@@ -351,14 +351,10 @@ unsigned long int sh_hash(char *key, size_t key_len){
  * this function can only error if table is null
  * so the caller can distinguish these 2 cases
  */
-size_t sh_pos(struct sh_table *table, unsigned long int hash){
-    if( ! table ){
-        puts("sh_pos: table undef");
-        return 0;
-    }
+size_t sh_pos(unsigned long int hash, size_t table_size){
 
     /* force hash value into a bucket */
-    return hash % table->size;
+    return hash % table_size;
 }
 
 /* allocate and initialise an ew sh_table of size size
@@ -568,7 +564,7 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
      * we know table is defined here
      * so sh_pos cannot fail
      */
-    pos = sh_pos(table, hash);
+    pos = sh_pos(hash, table->size);
 
 #ifdef DEBUG
     puts("sh_insert: calling sh_entry_new");
@@ -725,7 +721,7 @@ void * sh_delete(struct sh_table *table, char *key){
      * we know table is defined here
      * so sh_pos cannot fail
      */
-    pos = sh_pos(table, hash);
+    pos = sh_pos(hash, table->size);
 
 
     /* iterate through bucket considering each entry

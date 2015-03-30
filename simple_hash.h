@@ -47,7 +47,7 @@ unsigned long int sh_hash(char *key, size_t key_len);
  * this function can only error if table is null
  * so the caller can distinguish these 2 cases
  */
-size_t sh_pos(struct sh_table *table, unsigned long int hash);
+size_t sh_pos(unsigned long int hash, size_t table_size);
 
 /* allocate and initialise an ew sh_table of size size
  *
