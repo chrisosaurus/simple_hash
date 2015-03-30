@@ -4,6 +4,23 @@ A simple implementation of a hash table written in pure C99 with no external dep
 
 Simple hash is licensed under the MIT license, see LICENSE for more details
 
+Hashing function
+----------------
+
+simple_hash uses an implementation of djb2 found on [http://www.cse.yorku.ca/~oz/hash.html](http://www.cse.yorku.ca/~oz/hash.html)
+
+    unsigned long
+    hash(unsigned char *str)
+    {
+        unsigned long hash = 5381;
+        int c;
+
+        while (c = *str++)
+            hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+        return hash;
+    }
+
 Example usage
 --------------
 
