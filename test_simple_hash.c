@@ -68,6 +68,7 @@ void new_insert_get_destroy(void){
 
 
     assert( sh_destroy(table, 1, 0) );
+    puts("success!");
 }
 
 void set(void){
@@ -167,6 +168,7 @@ void set(void){
 
 
     assert( sh_destroy(table, 1, 0) );
+    puts("success!");
 }
 
 void delete(void){
@@ -258,6 +260,7 @@ void delete(void){
 
 
     assert( sh_destroy(table, 1, 0) );
+    puts("success!");
 }
 
 void collision(void){
@@ -454,6 +457,7 @@ void collision(void){
     assert( data_7 == *data );
 
     assert( sh_destroy(table, 1, 0) );
+    puts("success!");
 }
 
 void resize(void){
@@ -527,6 +531,106 @@ void resize(void){
     assert( data_1 == *data );
 
     assert( sh_destroy(table, 1, 0) );
+    puts("success!");
+}
+
+void error_handling(void){
+    /* our simple hash table */
+    struct sh_table *table = 0;
+    struct sh_table *not_table = 0;
+    struct sh_table static_table;
+
+    /* some keys */
+    char *key_1 = "bbbbb";
+    char *key_2 = "aaaaa";
+    char *key_3 = "ccccc";
+
+    /* some data */
+    int data_1 = 1;
+    int data_2 = 2;
+    int data_3 = 3;
+
+    /* temporary data pointer used for testing get */
+    int *data = 0;
+
+
+    puts("\ntesting handling of error cases");
+    puts("setting up...");
+
+    puts("creating table");
+    table = sh_new(3);
+    assert(table);
+    assert( 3 == table->size );
+    assert( 0 == table->n_elems );
+
+    puts("inserting some data");
+    assert( sh_insert(table, key_1, &data_1) );
+    assert( 1 == table->n_elems );
+    assert( 0 == sh_get(table, key_2) );
+    assert( 0 == sh_get(table, key_3) );
+    data = sh_get(table, key_1);
+    assert(data);
+    assert( data_1 == *data );
+
+
+    assert( sh_insert(table, key_2, &data_2) );
+    assert( 2 == table->n_elems );
+    assert( 0 == sh_get(table, key_3) );
+    data = sh_get(table, key_2);
+    assert(data);
+    assert( data_2 == *data );
+
+
+    puts("beginning actual testing, cue wall of errors");
+    /* sh_hash */
+    puts("testing sh_hash");
+    assert( 0 == sh_hash(0, 0) );
+    assert( sh_hash(key_1, 0) );
+
+    /* sh_new and sh_init */
+    puts("testing sh_new and sh_init");
+    assert( 0 == sh_new(0) );
+    assert( 0 == sh_init(0, 100) );
+    assert( 0 == sh_init(&static_table, 0) );
+
+    /* sh_resize */
+    puts("testing sh_resize");
+    assert( 0 == sh_resize(0, 100) );
+    assert( 0 == sh_resize(table, 0) );
+
+    /* sh_exists */
+    puts("testing sh_exists");
+    assert( 0 == sh_exists(0, key_1) );
+    assert( 0 == sh_exists(table, 0) );
+    assert( 0 == sh_exists(table, key_3) );
+
+    /* sh_insert */
+    puts("testing sh_insert");
+    assert( 0 == sh_insert(0, key_1, &data_1) );
+    /* cannot insert if already exists */
+    assert( 0 == sh_insert(table, key_1, &data_1) );
+
+    /* sh_set */
+    puts("testing sh_set");
+    assert( 0 == sh_set(0, key_1, &data_1) );
+    /* cannot set if doesn't already exist */
+    assert( 0 == sh_set(0, key_3, &data_3) );
+
+    /* sh_get */
+    puts("testing sh_get");
+    assert( 0 == sh_get(0, key_1) );
+    assert( 0 == sh_get(table, 0) );
+    assert( 0 == sh_get(table, key_3) );
+
+    /* sh_delete */
+    puts("testing sh_delete");
+    assert( 0 == sh_delete(0, key_1) );
+    assert( 0 == sh_delete(table, key_3) );
+
+
+    /* tidy up */
+    assert( sh_destroy(table, 1, 0) );
+    puts("success!");
 }
 
 int main(void){
@@ -540,7 +644,9 @@ int main(void){
 
     resize();
 
-    puts("\nsuccess!");
+    error_handling();
+
+    puts("\noverall testing success!");
 
     return 0;
 }
