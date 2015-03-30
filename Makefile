@@ -2,7 +2,7 @@
 
 include config.mk
 
-SRC = $(shell find . -name '*.c' | grep -v test_*.c)
+SRC = $(shell find . -name '*.c' | grep -v test_*.c | grep -v example.c)
 OBJ = ${SRC:.c=.o}
 
 EXTRAFLAGS =
