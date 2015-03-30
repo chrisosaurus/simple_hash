@@ -275,7 +275,8 @@ void collision(void){
     char *key_5 = "lettuce";
     char *key_6 = "beetroot";
     char *key_7 = "chocolate";
-    char *key_8 = "frying pan";
+    /* long string to try cause some havoc */
+    char *key_8 = "frying pan porcupine";
     char *key_9 = "a4 paper";
 
     /* some data */
