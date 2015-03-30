@@ -244,7 +244,9 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
     }
 
     /* failed to find element */
+#ifdef DEBUG
     puts("sh_find_entry: failed to find key");
+#endif
     return 0;
 }
 
