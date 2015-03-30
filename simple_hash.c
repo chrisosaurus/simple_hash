@@ -207,8 +207,67 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
  * returns 0 on error
  */
 unsigned long int sh_hash(char *key, size_t key_len){
-    puts("sh_hash: unimplemented");
-    return 0;
+    /* our hash value */
+    unsigned long int hash = 0;
+    /* our old value of hash, to try detect when we exceed ULONG_MAX */
+    unsigned long int old_hash = 0;
+    /* our iterator through the key */
+    size_t i = 0;
+    /* the maximum number of characters we can pack into an unsigned long int */
+    size_t max_pack_num = sizeof(unsigned long int);
+
+    if( ! key ){
+        puts("sh_hash: key undef");
+        return 0;
+    }
+
+    /* we allow key_len to be 0
+     * we issue a warning and then recalculate
+     */
+    if( ! key_len ){
+        puts("sh_hash: key_len was 0, recalculating");
+        key_len = strlen(key);
+    }
+
+
+    /* C99 section 6.2.5.9 page 34:
+     * A computation involving unsigned operands can never overﬂow,
+     * because a result that cannot be represented by the resulting
+     * unsigned integer type is reduced modulo the number that is one
+     * greater than the largest value that can be represented by the
+     * resulting type.
+     */
+
+    /* hashing time */
+    for( i=0; i < key_len; ++i ){
+
+        /* stop if we have packed as many characters as we can into our hash */
+        if( i > max_pack_num ){
+            printf("sh_hash: max_pack_num exceeded for string '%s'\n", key);
+            break;
+        }
+
+        /* stop if we have hit max */
+        if( hash == ULONG_MAX ){
+            break;
+        }
+
+        /* stop if we detect we have exceeded max */
+        if( old_hash > hash ){
+            puts("sh_hash: exceeded ULONG_MAX, stopping");
+            break;
+        }
+
+        old_hash = hash;
+
+        /* hash this character
+         * FIXME smarter hashing algorithm
+         */
+        hash = hash << 8;
+        hash += key[i];
+    }
+
+    return hash;
 }
 
 /* takes a table and a hash value
