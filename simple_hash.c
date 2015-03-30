@@ -350,7 +350,71 @@ unsigned int sh_exists(struct sh_table *table, char *key){
  * returns 0 on error
  */
 unsigned int sh_insert(struct sh_table *table, char *key, void *data){
-    puts("sh_insert: unimplemented");
+    /* our new entry */
+    struct sh_entry *she = 0;
+    /* hash */
+    unsigned long int hash = 0;
+    /* position in hash table */
+    size_t pos = 0;
+    /* cached strlen */
+    size_t key_len = 0;
+
+    if( ! table ){
+        puts("sh_insert: table undef");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_insert: key undef");
+        return 0;
+    }
+
+    /* we allow data to be 0 */
+
+    /* check for already existing key
+     * insert only works if the key is not already present
+     */
+    if( sh_exists(table, key) ){
+        puts("sh_insert: key already exists in table");
+        return 0;
+    }
+
+    /* cache strlen */
+    key_len = strlen(key);
+
+    /* calculate hash */
+    hash = sh_hash(key);
+
+    /* calculate pos
+     * we know table is defined here
+     * so sh_pos cannot fail
+     */
+    pos = sh_pos(table, hash);
+
+    /* construct our new sh_entry
+     * sh_entry_new(unsigned long int hash,
+     *              char *key,
+     *              size_t key_len,
+     *              void *data,
+     *              struct sh_entry *next){
+     *
+     * only key needs to be defined
+     *
+     */
+    /*                (hash, key, key_len, data, next) */
+    she = sh_entry_new(hash, key, key_len, data, table->entries[pos]);
+    if( ! she ){
+        puts("sh_insert: call to sh_entry_new failed");
+        return 0;
+    }
+
+    /* insert at front of bucket
+     * this is safe as we have already captures the current
+     * value in she->next
+     */
+    table->entries[pos] = she;
+
+    /* return success */
     return 0;
 }
 
