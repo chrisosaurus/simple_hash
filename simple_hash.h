@@ -37,6 +37,10 @@ unsigned long int sh_hash(char *key);
  *
  * returns the index into the table for this hash
  * returns 0 on error (if table is null)
+ *
+ * note the error value is indistinguishable from the 0th bucket
+ * this function can only error if table is null
+ * so the caller can distinguish these 2 cases
  */
 size_t sh_pos(struct sh_table *table, unsigned long int hash);
 

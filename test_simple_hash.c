@@ -59,5 +59,6 @@ void new_insert_get_destroy(void){
 
 int main(void){
     new_insert_get_destroy();
+    return 0;
 }
 

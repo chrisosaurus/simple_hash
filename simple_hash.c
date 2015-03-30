@@ -30,10 +30,19 @@ unsigned long int sh_hash(char *key){
  *
  * returns the index into the table for this hash
  * returns 0 on error (if table is null)
+ *
+ * note the error value is indistinguishable from the 0th bucket
+ * this function can only error if table is null
+ * so the caller can distinguish these 2 cases
  */
 size_t sh_pos(struct sh_table *table, unsigned long int hash){
-    puts("unimplemented");
-    return 0;
+    if( ! table ){
+        puts("sh_pos: table undef");
+        return 0;
+    }
+
+    /* force hash value into a bucket */
+    return hash % table->size;
 }
 
 /* allocate and initialise an ew sh_table of size size
@@ -42,8 +51,22 @@ size_t sh_pos(struct sh_table *table, unsigned long int hash){
  * returns 0 on error
  */
 struct sh_table * sh_new(size_t size){
-    puts("unimplemented");
-    return 0;
+    struct sh_table *sht = 0;
+
+    /* alloc */
+    sht = calloc(1, sizeof(struct sh_table));
+    if( ! sht ){
+        puts("sh_new: calloc failed");
+        return 0;
+    }
+
+    /* init */
+    if( ! sh_init(sht, size) ){
+        puts("sh_new: call to sh_init failed");
+        return 0;
+    }
+
+    return sht;
 }
 
 /* free an existing sh_table
@@ -66,8 +89,21 @@ unsigned int sh_destroy(struct sh_table *table, unsigned int free_data){
  * returns 0 on error
  */
 unsigned int sh_init(struct sh_table *table, size_t size){
-    puts("unimplemented");
-    return 0;
+    if( ! table ){
+        puts("sh_init: table undef");
+        return 0;
+    }
+
+    table->size = size;
+
+    /* calloc our buckets (pointer to sh_entry) */
+    table->entries = calloc(size, sizeof(struct sh_entry *));
+    if( ! table->entries ){
+        puts("sh_init: calloc failed");
+        return 0;
+    }
+
+    return 1;
 }
 
 /* resize an existing table to new_size
