@@ -272,8 +272,6 @@ static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
 unsigned long int sh_hash(char *key, size_t key_len){
     /* our hash value */
     unsigned long int hash = 0;
-    /* our old value of hash, to try detect when we exceed ULONG_MAX */
-    unsigned long int old_hash = 0;
     /* our iterator through the key */
     size_t i = 0;
 
@@ -294,32 +292,22 @@ unsigned long int sh_hash(char *key, size_t key_len){
     printf("sh_hash: hashing string '%s'\n", key);
 #endif
 
-    /* C99 section 6.2.5.9 page 34:
-     * A computation involving unsigned operands can never overﬂow,
-     * because a result that cannot be represented by the resulting
-     * unsigned integer type is reduced modulo the number that is one
-     * greater than the largest value that can be represented by the
-     * resulting type.
-     */
-
     /* hashing time */
     for( i=0; i < key_len; ++i ){
 
 #ifdef DEBUG
     printf("sh_hash: looking at i '%zd', char '%c'\n", i, key[i]);
 #endif
-        /* stop if we have hit max */
-        if( hash == ULONG_MAX ){
-            break;
-        }
 
-        /* stop if we detect we have exceeded max */
-        if( old_hash > hash ){
-            puts("sh_hash: exceeded ULONG_MAX, stopping");
-            break;
-        }
-
-        old_hash = hash;
+        /* we do not have to worry about overflow doing silly things:
+         *
+         * C99 section 6.2.5.9 page 34:
+         * A computation involving unsigned operands can never overﬂow,
+         * because a result that cannot be represented by the resulting
+         * unsigned integer type is reduced modulo the number that is one
+         * greater than the largest value that can be represented by the
+         * resulting type.
+         */
 
         /* hash this character
          * http://www.cse.yorku.ca/~oz/hash.html
