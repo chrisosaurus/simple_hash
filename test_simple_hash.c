@@ -26,8 +26,10 @@ void new_insert_get_destroy(void){
     table = sh_new(32);
     assert(table);
     assert( 32 == table->size );
+    assert( 0 == table->n_elems );
 
     assert( sh_insert(table, key_1, &data_1) );
+    assert( 1 == table->n_elems );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
 
@@ -37,6 +39,7 @@ void new_insert_get_destroy(void){
 
 
     assert( sh_insert(table, key_2, &data_2) );
+    assert( 2 == table->n_elems );
     assert( 0 == sh_get(table, key_3) );
 
     data = sh_get(table, key_2);
@@ -44,7 +47,8 @@ void new_insert_get_destroy(void){
     assert( data_2 == *data );
 
 
-    assert( sh_insert(table, key_2, &data_2) );
+    assert( sh_insert(table, key_3, &data_3) );
+    assert( 3 == table->n_elems );
 
     data = sh_get(table, key_3);
     assert(data);
@@ -52,9 +56,6 @@ void new_insert_get_destroy(void){
 
 
     assert( sh_destroy(table, 1, 0) );
-
-
-
 }
 
 int main(void){
