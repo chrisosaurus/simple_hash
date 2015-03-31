@@ -1,6 +1,5 @@
 # Simple hash [![Coverage Status](https://coveralls.io/repos/mkfifo/simple_hash/badge.svg?branch=master)](https://coveralls.io/r/mkfifo/simple_hash?branch=master)
-
-A simple implementation of a hash table written in pure C99 with no external dependencies
+A simple implementation of a chaining hash table written in pure C99 with no external dependencies
 
 Simple hash is licensed under the MIT license, see LICENSE for more details
 
