@@ -186,7 +186,7 @@ unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, u
         return 0;
     }
 
-    if( free_data ){
+    if( free_data && entry->data ){
         free(entry->data);
     }
 

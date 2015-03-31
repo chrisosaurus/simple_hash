@@ -740,12 +740,16 @@ int internal(void){
     assert( 0 == sh_entry_init(0, 0, 0, 0, 0, 0) );
     assert( 0 == sh_entry_init(&she, 0, 0, 0, 0, 0) );
     assert( 0 == sh_entry_new(0, 0, 0, 0, 0) );
-    assert( sh_entry_new(0, "hello", 0, 0, 0) );
+    new_she = sh_entry_new(0, "hello", 0, 0, 0);
+    assert(new_she);
     assert( sh_entry_init(&she, 0, "hello", 0, 0, 0) );
 
     /* sh_entry_destroy */
     puts("testing sh_entry_destroy");
     assert( 0 == sh_entry_destroy(0, 0, 0) );
+    new_she->data = calloc(1, sizeof(int));
+    assert(new_she->data);
+    assert(  sh_entry_destroy(new_she, 1, 1) );
 
     /* sh_find_entry */
     puts("testing sh_find_entry");
