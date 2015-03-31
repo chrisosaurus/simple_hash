@@ -639,6 +639,8 @@ void error_handling(void){
     assert( 0 == sh_delete(0, key_1) );
     assert( 0 == sh_delete(table, key_3) );
 
+    /* sh_destroy */
+    assert( 0 == sh_destroy(0, 1, 0) );
 
     /* tidy up */
     assert( sh_destroy(table, 1, 0) );
@@ -648,6 +650,7 @@ void error_handling(void){
 int internal(void){
     struct sh_table table;
     struct sh_entry she;
+    struct sh_entry *new_she = 0;
 
     puts("\ntesting internal functions");
 
@@ -660,6 +663,8 @@ int internal(void){
     assert( 0 == sh_entry_init(0, 0, 0, 0, 0, 0) );
     assert( 0 == sh_entry_init(&she, 0, 0, 0, 0, 0) );
     assert( 0 == sh_entry_new(0, 0, 0, 0, 0) );
+    assert( sh_entry_new(0, "hello", 0, 0, 0) );
+    assert( sh_entry_init(&she, 0, "hello", 0, 0, 0) );
 
     /* sh_entry_destroy */
     puts("testing sh_entry_destroy");
