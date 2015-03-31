@@ -674,12 +674,12 @@ void * sh_set(struct sh_table *table, char *key, void *data){
     void * old_data = 0;
 
     if( ! table ){
-        puts("sh_get: table undef");
+        puts("sh_set: table undef");
         return 0;
     }
 
     if( ! key ){
-        puts("sh_get: key undef");
+        puts("sh_set: key undef");
         return 0;
     }
 
