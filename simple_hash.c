@@ -17,6 +17,9 @@
  * but only during testing mode
  */
 #pragma GCC diagnostic ignored "-Wmissing-prototypes"
+#define SH_INTERNAL
+#else
+#define SH_INTERNAL static
 #endif
 
 
@@ -33,10 +36,7 @@
  * returns char* to new memory containing a strcpy on success
  * returns 0 on error
  */
-#ifndef SH_TEST
-static
-#endif
-char * sh_strdupn(char *str, size_t len){
+SH_INTERNAL char * sh_strdupn(char *str, size_t len){
     /* our new string */
     char *new_str = 0;
 
@@ -82,10 +82,7 @@ char * sh_strdupn(char *str, size_t len){
  * returns 1 on success
  * returns 0 on error
  */
-#ifndef SH_TEST
-static
-#endif
-unsigned int sh_entry_init(struct sh_entry *entry,
+SH_INTERNAL unsigned int sh_entry_init(struct sh_entry *entry,
                                   unsigned long int hash,
                                   char *key,
                                   size_t key_len,
@@ -140,10 +137,7 @@ unsigned int sh_entry_init(struct sh_entry *entry,
  * returns pointer on success
  * returns 0 on failure
  */
-#ifndef SH_TEST
-static
-#endif
-struct sh_entry * sh_entry_new(unsigned long int hash,
+SH_INTERNAL struct sh_entry * sh_entry_new(unsigned long int hash,
                                       char *key,
                                       size_t key_len,
                                       void *data,
@@ -177,10 +171,7 @@ struct sh_entry * sh_entry_new(unsigned long int hash,
  * returns 1 on success
  * returns 0 on error
  */
-#ifndef SH_TEST
-static
-#endif
-unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, unsigned int free_data){
+SH_INTERNAL unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, unsigned int free_data){
     if( ! entry ){
         puts("sh_entry_destroy: entry undef");
         return 0;
@@ -207,10 +198,7 @@ unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, u
  * returns a pointer to it on success
  * return 0 on failure
  */
-#ifndef SH_TEST
-static
-#endif
-struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
+SH_INTERNAL struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
     /* our cur entry */
     struct sh_entry *cur = 0;
 
