@@ -7,12 +7,6 @@
 
 #include "simple_hash.h"
 
-/* FIXME temporary crutches */
-/* ignore unused parameter warnings */
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-/* ignore unused function warnings */
-#pragma GCC diagnostic ignored "-Wunused-function"
-
 
 /**********************************************
  **********************************************
