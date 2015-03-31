@@ -6,6 +6,17 @@
 
 #include "simple_hash.h"
 
+/* headers for internal functions within simple_hash.c
+ * that are not exposed via the header
+ * these would be static but we want to be able to test them
+ */
+char * sh_strdupn(char *str, size_t len);
+unsigned int sh_entry_init(struct sh_entry *entry, unsigned long int hash, char *key, size_t key_len, void *data, struct sh_entry *next);
+struct sh_entry * sh_entry_new(unsigned long int hash, char *key, size_t key_len, void *data, struct sh_entry *next);
+unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, unsigned int free_data);
+struct sh_entry * sh_find_entry(struct sh_table *table, char *key);
+
+
 void new_insert_get_destroy(void){
     /* our simple hash table */
     struct sh_table *table = 0;
@@ -634,6 +645,34 @@ void error_handling(void){
     puts("success!");
 }
 
+int internal(void){
+    struct sh_table table;
+    struct sh_entry she;
+
+    puts("\ntesting internal functions");
+
+    /* sh_strdupn */
+    puts("testing sh_strdupn");
+    assert( 0 == sh_strdupn(0, 6) );
+
+    /* sh_entry_new and sh_entry_init */
+    puts("testing sh_entry_new and sh_entry_init");
+    assert( 0 == sh_entry_init(0, 0, 0, 0, 0, 0) );
+    assert( 0 == sh_entry_init(&she, 0, 0, 0, 0, 0) );
+    assert( 0 == sh_entry_new(0, 0, 0, 0, 0) );
+
+    /* sh_entry_destroy */
+    puts("testing sh_entry_destroy");
+    assert( 0 == sh_entry_destroy(0, 0, 0) );
+
+    /* sh_find_entry */
+    puts("testing sh_find_entry");
+    assert( 0 == sh_find_entry(0, "hello") );
+    assert( 0 == sh_find_entry(&table, 0) );
+
+    puts("success!");
+}
+
 int main(void){
     new_insert_get_destroy();
 
@@ -646,6 +685,8 @@ int main(void){
     resize();
 
     error_handling();
+
+    internal();
 
     puts("\noverall testing success!");
 

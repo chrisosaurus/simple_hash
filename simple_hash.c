@@ -7,6 +7,18 @@
 
 #include "simple_hash.h"
 
+#ifdef SH_TEST
+/* when SH_TEST is defined we want our internal functions to be
+ * exposed so that our testing code can access them
+ * otherwise (when ifndef SH_TEST) we want them to be static
+ */
+
+/* ignore missing prototype  warnings
+ * but only during testing mode
+ */
+#pragma GCC diagnostic ignored "-Wmissing-prototypes"
+#endif
+
 
 /**********************************************
  **********************************************
@@ -21,7 +33,10 @@
  * returns char* to new memory containing a strcpy on success
  * returns 0 on error
  */
-static char * sh_strdupn(char *str, size_t len){
+#ifndef SH_TEST
+static
+#endif
+char * sh_strdupn(char *str, size_t len){
     /* our new string */
     char *new_str = 0;
 
@@ -67,7 +82,10 @@ static char * sh_strdupn(char *str, size_t len){
  * returns 1 on success
  * returns 0 on error
  */
-static unsigned int sh_entry_init(struct sh_entry *entry,
+#ifndef SH_TEST
+static
+#endif
+unsigned int sh_entry_init(struct sh_entry *entry,
                                   unsigned long int hash,
                                   char *key,
                                   size_t key_len,
@@ -122,7 +140,10 @@ static unsigned int sh_entry_init(struct sh_entry *entry,
  * returns pointer on success
  * returns 0 on failure
  */
-static struct sh_entry * sh_entry_new(unsigned long int hash,
+#ifndef SH_TEST
+static
+#endif
+struct sh_entry * sh_entry_new(unsigned long int hash,
                                       char *key,
                                       size_t key_len,
                                       void *data,
@@ -152,11 +173,17 @@ static struct sh_entry * sh_entry_new(unsigned long int hash,
  * will free all other values
  *
  * will free provided *entry if `free_entry` is 1
+ *
+ * returns 1 on success
+ * returns 0 on error
  */
-static void sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, unsigned int free_data){
+#ifndef SH_TEST
+static
+#endif
+unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, unsigned int free_data){
     if( ! entry ){
         puts("sh_entry_destroy: entry undef");
-        return;
+        return 0;
     }
 
     if( free_data ){
@@ -170,6 +197,8 @@ static void sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, un
     if( free_entry ){
         free(entry);
     }
+
+    return 1;
 }
 
 
@@ -178,7 +207,10 @@ static void sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, un
  * returns a pointer to it on success
  * return 0 on failure
  */
-static struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
+#ifndef SH_TEST
+static
+#endif
+struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
     /* our cur entry */
     struct sh_entry *cur = 0;
 
@@ -791,7 +823,9 @@ void * sh_delete(struct sh_table *table, char *key){
         /* free element and contents
          * do NOT free data, leave that up to caller
          */
-        sh_entry_destroy(cur, 1, 0);
+        if( ! sh_entry_destroy(cur, 1, 0) ){
+            puts("sh_delete: warning, call to sh_entry_destroy failed, continuing...");
+        }
 
         /* return old data */
         return old_data;
