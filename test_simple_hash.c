@@ -691,14 +691,16 @@ void error_handling(void){
     /* sh_insert */
     puts("testing sh_insert");
     assert( 0 == sh_insert(0, key_1, &data_1) );
+    assert( 0 == sh_insert(0, 0, &data_1) );
     /* cannot insert if already exists */
     assert( 0 == sh_insert(table, key_1, &data_1) );
 
     /* sh_set */
     puts("testing sh_set");
     assert( 0 == sh_set(0, key_1, &data_1) );
+    assert( 0 == sh_set(table, 0, &data_1) );
     /* cannot set if doesn't already exist */
-    assert( 0 == sh_set(0, key_3, &data_3) );
+    assert( 0 == sh_set(table, key_3, &data_3) );
 
     /* sh_get */
     puts("testing sh_get");
@@ -709,6 +711,8 @@ void error_handling(void){
     /* sh_delete */
     puts("testing sh_delete");
     assert( 0 == sh_delete(0, key_1) );
+    assert( 0 == sh_delete(table, 0) );
+    /* cannot delete a non-existent key */
     assert( 0 == sh_delete(table, key_3) );
 
     /* sh_destroy */
@@ -729,6 +733,7 @@ int internal(void){
     /* sh_strdupn */
     puts("testing sh_strdupn");
     assert( 0 == sh_strdupn(0, 6) );
+    assert( sh_strdupn("hello", 0) );
 
     /* sh_entry_new and sh_entry_init */
     puts("testing sh_entry_new and sh_entry_init");
