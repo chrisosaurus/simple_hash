@@ -49,7 +49,7 @@ unsigned long int sh_hash(char *key, size_t key_len);
  */
 size_t sh_pos(unsigned long int hash, size_t table_size);
 
-/* allocate and initialise an ew sh_table of size size
+/* allocate and initialise a new sh_table of size size
  *
  * returns pointer on success
  * returns 0 on error
