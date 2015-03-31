@@ -691,7 +691,7 @@ void error_handling(void){
     /* sh_insert */
     puts("testing sh_insert");
     assert( 0 == sh_insert(0, key_1, &data_1) );
-    assert( 0 == sh_insert(0, 0, &data_1) );
+    assert( 0 == sh_insert(table, 0, &data_1) );
     /* cannot insert if already exists */
     assert( 0 == sh_insert(table, key_1, &data_1) );
 
