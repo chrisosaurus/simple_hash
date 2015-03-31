@@ -491,10 +491,8 @@ unsigned int sh_resize(struct sh_table *table, size_t new_size){
              cur;
              cur = next ){
 
-            next = 0;
-            if( cur ){
-                next = cur->next;
-            }
+            /* make sure to track our next pointer */
+            next = cur->next;
 
             /* our position within new entries */
             new_pos = sh_pos(cur->hash, new_size);
