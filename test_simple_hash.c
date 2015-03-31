@@ -3,6 +3,7 @@
  */
 #include <assert.h> /* assert */
 #include <stdio.h> /* puts */
+#include <stdlib.h> /* calloc */
 
 #include "simple_hash.h"
 
@@ -546,6 +547,77 @@ void resize(void){
     puts("success!");
 }
 
+void destroy(void){
+    /* specifically test sh_destroy with free_data = 1 */
+
+    /* our simple hash table */
+    struct sh_table *table = 0;
+
+    /* some keys */
+    char *key_1 = "bbbbb";
+    char *key_2 = "aaaaa";
+    char *key_3 = "ccccc";
+
+    /* some data */
+    int *data_1 = 0;
+    int *data_2 = 0;
+    int *data_3 = 0;
+
+    /* temporary data pointer used for testing get */
+    int *data = 0;
+
+    data_1 = calloc(1, sizeof(int));
+    assert( data_1 );
+    *data_1 = 1;
+
+    data_2 = calloc(1, sizeof(int));
+    assert( data_2 );
+    *data_2 = 2;
+
+    data_3 = calloc(1, sizeof(int));
+    assert( data_3 );
+    *data_3 = 3;
+
+
+    puts("\ntesting destroy");
+
+    puts("creating table");
+    table = sh_new(32);
+    assert(table);
+    assert( 32 == table->size );
+    assert( 0 == table->n_elems );
+
+
+    puts("populating");
+    assert( sh_insert(table, key_1, data_1) );
+    assert( 1 == table->n_elems );
+    assert( 0 == sh_get(table, key_2) );
+    assert( 0 == sh_get(table, key_3) );
+    data = sh_get(table, key_1);
+    assert(data);
+    assert( *data_1 == *data );
+
+
+    assert( sh_insert(table, key_2, data_2) );
+    assert( 2 == table->n_elems );
+    assert( 0 == sh_get(table, key_3) );
+    data = sh_get(table, key_2);
+    assert(data);
+    assert( *data_2 == *data );
+
+
+    assert( sh_insert(table, key_3, data_3) );
+    assert( 3 == table->n_elems );
+    data = sh_get(table, key_3);
+    assert(data);
+    assert( *data_3 == *data );
+
+
+    /* destroy including all data */
+    assert( sh_destroy(table, 1, 1) );
+    puts("success!");
+}
+
 void error_handling(void){
     /* our simple hash table */
     struct sh_table *table = 0;
@@ -688,6 +760,8 @@ int main(void){
     collision();
 
     resize();
+
+    destroy();
 
     error_handling();
 
