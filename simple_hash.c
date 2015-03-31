@@ -108,7 +108,7 @@ unsigned int sh_entry_init(struct sh_entry *entry,
 
     /* if key_len is 0 we issue a warning and recalcualte */
     if( key_len == 0 ){
-        puts("warning sh_entry_init: provided key_lenb was 0, recalcuating");
+        puts("warning sh_entry_init: provided key_len was 0, recalcuating");
         key_len = strlen(key);
     }
 
