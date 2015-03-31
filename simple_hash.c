@@ -41,7 +41,7 @@ char * sh_strdupn(char *str, size_t len){
     char *new_str = 0;
 
     if( ! str ){
-        puts("sh_strdup: str undef");
+        puts("sh_strdupn: str undef");
         return 0;
     }
 
@@ -49,7 +49,7 @@ char * sh_strdupn(char *str, size_t len){
      * note that if strlen is still 0 then all is well
      */
     if( len == 0 ){
-        puts("sh_strdup: provided len was 0, recalculating");
+        puts("sh_strdupn: provided len was 0, recalculating");
         len = strlen(str);
     }
 
@@ -58,13 +58,13 @@ char * sh_strdupn(char *str, size_t len){
      */
     new_str = calloc(len + 1, sizeof(char));
     if( ! new_str ){
-        puts("sh_strdup: call to calloc failed");
+        puts("sh_strdupn: call to calloc failed");
         return 0;
     }
 
     /* perform copy */
     if( ! strncpy(new_str, str, len) ){
-        puts("sh_strdup: call to strncpy failed");
+        puts("sh_strdupn: call to strncpy failed");
         return 0;
     }
 
@@ -127,7 +127,7 @@ unsigned int sh_entry_init(struct sh_entry *entry,
     /* we duplicate the string */
     entry->key = sh_strdupn(key, key_len);
     if( ! entry->key ){
-        puts("sh_entry_init: call to sh_strdup failed");
+        puts("sh_entry_init: call to sh_strdupn failed");
         return 0;
     }
 
