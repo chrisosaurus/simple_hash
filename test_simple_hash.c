@@ -727,13 +727,16 @@ int internal(void){
     struct sh_table table;
     struct sh_entry she;
     struct sh_entry *new_she = 0;
+    char * str = 0;
 
     puts("\ntesting internal functions");
 
     /* sh_strdupn */
     puts("testing sh_strdupn");
     assert( 0 == sh_strdupn(0, 6) );
-    assert( sh_strdupn("hello", 0) );
+    str = sh_strdupn("hello", 0);
+    assert(str);
+    free(str);
 
     /* sh_entry_new and sh_entry_init */
     puts("testing sh_entry_new and sh_entry_init");
