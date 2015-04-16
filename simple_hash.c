@@ -88,10 +88,7 @@ SH_INTERNAL char * sh_strdupn(char *str, size_t len){
     }
 
     /* perform copy */
-    if( ! strncpy(new_str, str, len) ){
-        puts("sh_strdupn: call to strncpy failed");
-        return 0;
-    }
+    strncpy(new_str, str, len);
 
     /* ensure null terminator
      * do not rely on calloc as we may switch
@@ -179,6 +176,8 @@ SH_INTERNAL struct sh_entry * sh_entry_new(unsigned long int hash,
     /* init */
     if( ! sh_entry_init(she, hash, key, key_len, data, next) ){
         puts("sh_entry_new: call to sh_entry_init failed");
+        /* no leaking */
+        free(she);
         return 0;
     }
 
@@ -394,6 +393,8 @@ struct sh_table * sh_new(size_t size){
     /* init */
     if( ! sh_init(sht, size) ){
         puts("sh_new: call to sh_init failed");
+        /* no leaking */
+        free(sht);
         return 0;
     }
 
