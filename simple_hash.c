@@ -782,12 +782,6 @@ void * sh_delete(struct sh_table *table, char *key){
         return 0;
     }
 
-    /* if we do not have this key then we consider this a failure */
-    if( ! sh_exists(table, key) ){
-        puts("sh_delete: key did not exist");
-        return 0;
-    }
-
     /* cache strlen */
     key_len = strlen(key);
 
