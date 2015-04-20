@@ -12,7 +12,7 @@ all: simple_hash
 
 %.o: %.c
 	@echo COMPILING CC $< with extra flags \"${EXTRAFLAGS}\"
-	@${CC} -g -c ${CFLAGS} -DSH_TEST $< ${EXTRAFLAGS} -o $@
+	@${CC} -g -c ${CFLAGS} $< ${EXTRAFLAGS} -o $@
 
 simple_hash: ${OBJ}
 	@echo "ERROR: unable to compile simple_hash on it's own as it is a library"
