@@ -1,0 +1,7 @@
+TODO
+
+* lines we can get via manipulative unit tests (see linear hash)
+    https://coveralls.io/builds/2376377/source?filename=simple_hash.c#L268
+    https://coveralls.io/builds/2376377/source?filename=simple_hash.c#L272
+    https://coveralls.io/builds/2376377/source?filename=simple_hash.c#L807
+    https://coveralls.io/builds/2376377/source?filename=simple_hash.c#L811
