@@ -55,7 +55,7 @@
  * returns char* to new memory containing a strcpy on success
  * returns 0 on error
  */
-char * sh_strdupn(char *str, size_t len){
+char * sh_strdupn(const char *str, size_t len){
     /* our new string */
     char *new_str = 0;
 
@@ -100,7 +100,7 @@ char * sh_strdupn(char *str, size_t len){
  */
 unsigned int sh_entry_init(struct sh_entry *entry,
                                   unsigned long int hash,
-                                  char *key,
+                                  const char *key,
                                   size_t key_len,
                                   void *data,
                                   struct sh_entry *next){
@@ -154,7 +154,7 @@ unsigned int sh_entry_init(struct sh_entry *entry,
  * returns 0 on failure
  */
 struct sh_entry * sh_entry_new(unsigned long int hash,
-                                      char *key,
+                                      const char *key,
                                       size_t key_len,
                                       void *data,
                                       struct sh_entry *next){
@@ -216,7 +216,7 @@ unsigned int sh_entry_destroy(struct sh_entry *entry, unsigned int free_entry, u
  * returns a pointer to it on success
  * return 0 on failure
  */
-struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
+struct sh_entry * sh_find_entry(const struct sh_table *table, const char *key){
     /* our cur entry */
     struct sh_entry *cur = 0;
 
@@ -301,7 +301,7 @@ struct sh_entry * sh_find_entry(struct sh_table *table, char *key){
  * returns an unsigned long integer hash value on success
  * returns 0 on error
  */
-unsigned long int sh_hash(char *key, size_t key_len){
+unsigned long int sh_hash(const char *key, size_t key_len){
     /* our hash value */
     unsigned long int hash = 0;
     /* our iterator through the key */
@@ -553,7 +553,7 @@ unsigned int sh_resize(struct sh_table *table, size_t new_size){
  * returns 1 on success (key exists)
  * returns 0 if key doesn't exist or on error
  */
-unsigned int sh_exists(struct sh_table *table, char *key){
+unsigned int sh_exists(const struct sh_table *table, const char *key){
     struct sh_entry *she = 0;
 
     if( ! table ){
@@ -587,7 +587,7 @@ unsigned int sh_exists(struct sh_table *table, char *key){
  * returns 1 on success
  * returns 0 on error
  */
-unsigned int sh_insert(struct sh_table *table, char *key, void *data){
+unsigned int sh_insert(struct sh_table *table, const char *key, void *data){
     /* our new entry */
     struct sh_entry *she = 0;
     /* hash */
@@ -677,7 +677,7 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data){
  * returns old data on success
  * returns 0 on error
  */
-void * sh_set(struct sh_table *table, char *key, void *data){
+void * sh_set(struct sh_table *table, const char *key, void *data){
     struct sh_entry *she = 0;
     void * old_data = 0;
 
@@ -715,7 +715,7 @@ void * sh_set(struct sh_table *table, char *key, void *data){
  * returns data on success
  * returns 0 on error
  */
-void * sh_get(struct sh_table *table, char *key){
+void * sh_get(const struct sh_table *table, const char *key){
     struct sh_entry *she = 0;
 
     if( ! table ){
@@ -744,7 +744,7 @@ void * sh_get(struct sh_table *table, char *key){
  * returns data on success
  * returns 0 on error
  */
-void * sh_delete(struct sh_table *table, char *key){
+void * sh_delete(struct sh_table *table, const char *key){
     /* our cur entry */
     struct sh_entry *cur = 0;
     /* the pointer where we store our next

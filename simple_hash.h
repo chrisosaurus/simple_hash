@@ -61,7 +61,7 @@ struct sh_table {
  * returns an unsigned long integer hash value on success
  * returns 0 on error
  */
-unsigned long int sh_hash(char *key, size_t key_len);
+unsigned long int sh_hash(const char *key, size_t key_len);
 
 /* takes a table and a hash value
  *
@@ -115,7 +115,7 @@ unsigned int sh_resize(struct sh_table *table, size_t new_size);
  * returns 1 on success (key exists)
  * returns 0 if key doesn't exist or on error
  */
-unsigned int sh_exists(struct sh_table *table, char *key);
+unsigned int sh_exists(const struct sh_table *table, const char *key);
 
 /* insert `data` under `key`
  * this will only success if !sh_exists(table, key)
@@ -123,7 +123,7 @@ unsigned int sh_exists(struct sh_table *table, char *key);
  * returns 1 on success
  * returns 0 on error
  */
-unsigned int sh_insert(struct sh_table *table, char *key, void *data);
+unsigned int sh_insert(struct sh_table *table, const char *key, void *data);
 
 /* set `data` under `key`
  * this will only succeed if sh_exists(table, key)
@@ -131,21 +131,21 @@ unsigned int sh_insert(struct sh_table *table, char *key, void *data);
  * returns old data on success
  * returns 0 on error
  */
-void * sh_set(struct sh_table *table, char *key, void *data);
+void * sh_set(struct sh_table *table, const char *key, void *data);
 
 /* get `data` stored under `key`
  *
  * returns data on success
  * returns 0 on error
  */
-void * sh_get(struct sh_table *table, char *key);
+void * sh_get(const struct sh_table *table, const char *key);
 
 /* delete entry stored under `key`
  *
  * returns data on success
  * returns 0 on error
  */
-void *  sh_delete(struct sh_table *table, char *key);
+void *  sh_delete(struct sh_table *table, const char *key);
 
 
 #endif // ifndef SIMPLE_HASH_H
