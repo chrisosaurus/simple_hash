@@ -6,3 +6,5 @@ test_sh
 *.gcno
 *.gcda
 
+*coveralls.sh
+
