@@ -52,6 +52,12 @@ struct sh_table {
     struct sh_entry **entries;
 };
 
+/* function to return number of elements
+ *
+ * returns number on success
+ * returns 0 on error
+ */
+unsigned int sh_nelems(const struct sh_table *table);
 
 /* takes a char* representing a string
  * and a key_len of it's size

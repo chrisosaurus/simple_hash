@@ -42,13 +42,13 @@ void new_insert_get_destroy(void){
     table = sh_new(32);
     assert(table);
     assert( 32 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
 
     puts("testing insert and get");
     puts("one insert");
     assert( sh_insert(table, key_1, &data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
 
@@ -60,7 +60,7 @@ void new_insert_get_destroy(void){
 
     puts("two insert");
     assert( sh_insert(table, key_2, &data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_3) );
 
     puts("two get");
@@ -71,7 +71,7 @@ void new_insert_get_destroy(void){
 
     puts("three insert");
     assert( sh_insert(table, key_3, &data_3) );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
 
     puts("three get");
     data = sh_get(table, key_3);
@@ -112,12 +112,12 @@ void set(void){
     table = sh_new(32);
     assert(table);
     assert( 32 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
 
     puts("inserting some data");
     assert( sh_insert(table, key_1, &data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
 
@@ -127,7 +127,7 @@ void set(void){
 
 
     assert( sh_insert(table, key_2, &data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_3) );
 
     data = sh_get(table, key_2);
@@ -136,7 +136,7 @@ void set(void){
 
 
     assert( sh_insert(table, key_3, &data_3) );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
 
     data = sh_get(table, key_3);
     assert(data);
@@ -152,7 +152,7 @@ void set(void){
     data = sh_set(table, key_2, &new_data_2);
     assert(data);
     assert( *data == data_2 );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
 
     data = sh_get(table, key_2);
     assert(data);
@@ -162,7 +162,7 @@ void set(void){
     data = sh_set(table, key_3, &new_data_3);
     assert(data);
     assert( *data == data_3 );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
 
     data = sh_get(table, key_3);
     assert(data);
@@ -172,7 +172,7 @@ void set(void){
     data = sh_set(table, key_1, &new_data_1);
     assert(data);
     assert( *data == data_1 );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
 
     data = sh_get(table, key_1);
     assert(data);
@@ -206,12 +206,12 @@ void delete(void){
     table = sh_new(32);
     assert(table);
     assert( 32 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
 
     puts("inserting some data");
     assert( sh_insert(table, key_1, &data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
 
@@ -221,7 +221,7 @@ void delete(void){
 
 
     assert( sh_insert(table, key_2, &data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_3) );
 
     data = sh_get(table, key_2);
@@ -230,7 +230,7 @@ void delete(void){
 
 
     assert( sh_insert(table, key_3, &data_3) );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
 
     data = sh_get(table, key_3);
     assert(data);
@@ -242,7 +242,7 @@ void delete(void){
     data = sh_delete(table, key_1);
     assert(data);
     assert(*data == data_1);
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_1);
@@ -253,7 +253,7 @@ void delete(void){
     data = sh_delete(table, key_3);
     assert(data);
     assert(*data == data_3);
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_3);
@@ -264,7 +264,7 @@ void delete(void){
     data = sh_delete(table, key_2);
     assert(data);
     assert(*data == data_2);
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_2);
@@ -311,67 +311,67 @@ void collision(void){
     table = sh_new(1);
     assert(table);
     assert( 1 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
 
     puts("inserting some data");
     assert( sh_insert(table, key_1, &data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     data = sh_get(table, key_1);
     assert(data);
     assert( data_1 == *data );
 
 
     assert( sh_insert(table, key_2, &data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     data = sh_get(table, key_2);
     assert(data);
     assert( data_2 == *data );
 
 
     assert( sh_insert(table, key_3, &data_3) );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
     data = sh_get(table, key_3);
     assert(data);
     assert( data_3 == *data );
 
     assert( sh_insert(table, key_4, &data_4) );
-    assert( 4 == table->n_elems );
+    assert( 4 == sh_nelems(table) );
     data = sh_get(table, key_4);
     assert(data);
     assert( data_4 == *data );
 
     assert( sh_insert(table, key_5, &data_5) );
-    assert( 5 == table->n_elems );
+    assert( 5 == sh_nelems(table) );
     data = sh_get(table, key_5);
     assert(data);
     assert( data_5 == *data );
 
     assert( sh_insert(table, key_6, &data_6) );
-    assert( 6 == table->n_elems );
+    assert( 6 == sh_nelems(table) );
     data = sh_get(table, key_6);
     assert(data);
     assert( data_6 == *data );
 
     assert( sh_insert(table, key_7, &data_7) );
-    assert( 7 == table->n_elems );
+    assert( 7 == sh_nelems(table) );
     data = sh_get(table, key_7);
     assert(data);
     assert( data_7 == *data );
 
     assert( sh_insert(table, key_8, &data_8) );
-    assert( 8 == table->n_elems );
+    assert( 8 == sh_nelems(table) );
     data = sh_get(table, key_8);
     assert(data);
     assert( data_8 == *data );
 
     assert( sh_insert(table, key_9, &data_9) );
-    assert( 9 == table->n_elems );
+    assert( 9 == sh_nelems(table) );
     data = sh_get(table, key_9);
     assert(data);
     assert( data_9 == *data );
 
-    assert( 9 == table->n_elems );
+    assert( 9 == sh_nelems(table) );
 
     puts("testing we can still get everything out");
 
@@ -417,7 +417,7 @@ void collision(void){
     data = sh_delete(table, key_1);
     assert(data);
     assert(*data == data_1);
-    assert( 8 == table->n_elems );
+    assert( 8 == sh_nelems(table) );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_1);
@@ -427,7 +427,7 @@ void collision(void){
     data = sh_delete(table, key_3);
     assert(data);
     assert(*data == data_3);
-    assert( 7 == table->n_elems );
+    assert( 7 == sh_nelems(table) );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_3);
@@ -437,7 +437,7 @@ void collision(void){
     data = sh_delete(table, key_2);
     assert(data);
     assert(*data == data_2);
-    assert( 6 == table->n_elems );
+    assert( 6 == sh_nelems(table) );
 
     /* should not be able to re-delete */
     data = sh_delete(table, key_2);
@@ -497,12 +497,12 @@ void resize(void){
     table = sh_new(3);
     assert(table);
     assert( 3 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
 
     puts("inserting some data");
     assert( sh_insert(table, key_1, &data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
     data = sh_get(table, key_1);
@@ -511,7 +511,7 @@ void resize(void){
 
 
     assert( sh_insert(table, key_2, &data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_3) );
     data = sh_get(table, key_2);
     assert(data);
@@ -519,7 +519,7 @@ void resize(void){
 
 
     assert( sh_insert(table, key_3, &data_3) );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
     data = sh_get(table, key_3);
     assert(data);
     assert( data_3 == *data );
@@ -527,7 +527,7 @@ void resize(void){
 
     puts("testing resize");
     assert( sh_resize(table, 10) );
-    assert( 3  == table->n_elems );
+    assert( 3  == sh_nelems(table) );
     assert( 10 == table->size );
 
     puts("testing we can still fetch all the old values");
@@ -585,12 +585,12 @@ void destroy(void){
     table = sh_new(32);
     assert(table);
     assert( 32 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
 
     puts("populating");
     assert( sh_insert(table, key_1, data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
     data = sh_get(table, key_1);
@@ -599,7 +599,7 @@ void destroy(void){
 
 
     assert( sh_insert(table, key_2, data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_3) );
     data = sh_get(table, key_2);
     assert(data);
@@ -607,7 +607,7 @@ void destroy(void){
 
 
     assert( sh_insert(table, key_3, data_3) );
-    assert( 3 == table->n_elems );
+    assert( 3 == sh_nelems(table) );
     data = sh_get(table, key_3);
     assert(data);
     assert( *data_3 == *data );
@@ -639,17 +639,21 @@ void error_handling(void){
 
 
     puts("\ntesting handling of error cases");
+
+    puts("testing sh_nelems");
+    assert( 0 == sh_nelems(0) );
+
     puts("setting up...");
 
     puts("creating table");
     table = sh_new(3);
     assert(table);
     assert( 3 == table->size );
-    assert( 0 == table->n_elems );
+    assert( 0 == sh_nelems(table) );
 
     puts("inserting some data");
     assert( sh_insert(table, key_1, &data_1) );
-    assert( 1 == table->n_elems );
+    assert( 1 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_2) );
     assert( 0 == sh_get(table, key_3) );
     data = sh_get(table, key_1);
@@ -658,7 +662,7 @@ void error_handling(void){
 
 
     assert( sh_insert(table, key_2, &data_2) );
-    assert( 2 == table->n_elems );
+    assert( 2 == sh_nelems(table) );
     assert( 0 == sh_get(table, key_3) );
     data = sh_get(table, key_2);
     assert(data);

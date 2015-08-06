@@ -293,6 +293,19 @@ struct sh_entry * sh_find_entry(const struct sh_table *table, const char *key){
  **********************************************
  ***********************************************/
 
+/* function to return number of elements
+ *
+ * returns number on success
+ * returns 0 on error
+ */
+unsigned int sh_nelems(const struct sh_table *table){
+    if( ! table ){
+        puts("sh_nelems: table was null");
+        return 0;
+    }
+
+    return table->n_elems;
+}
 
 /* takes a char* representing a string
  *
