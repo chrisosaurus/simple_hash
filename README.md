@@ -27,6 +27,8 @@ Example usage
 
     #include "simple_hash.h"
 
+    #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+
     int main(void){
         /* create a hash with 32 buckets */
         struct sh_table *t = sh_new(32);
@@ -63,5 +65,7 @@ Example usage
          * but do not free stored data
          * destroy(table, free_table, free_data) */
         sh_destroy(t,     1,          0);
+
+        return 0;
     }
 

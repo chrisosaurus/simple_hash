@@ -25,6 +25,7 @@ cleanobj:
 clean: cleanobj
 	@echo cleaning tests
 	@rm -f test_sh
+	@rm -f example
 	@echo cleaning gcov guff
 	@find . -iname '*.gcda' -delete
 	@find . -iname '*.gcov' -delete
@@ -43,5 +44,10 @@ compile_tests: clean ${OBJ}
 	@${CC} test_simple_hash.c -o test_sh ${LDFLAGS} ${OBJ}
 	@make -s cleanobj
 
-.PHONY: all clean cleanobj simple_hash test
+example: clean ${OBJ}
+	@echo "compiling and running example"
+	@${CC} example.c -o example ${LDFLAGS} ${OBJ}
+	./example
+
+.PHONY: all clean cleanobj simple_hash test example
 
