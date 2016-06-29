@@ -35,9 +35,9 @@ clean: cleanobj
 test: run_tests
 
 run_tests: compile_tests
-	@echo "\n\nrunning test_sh"
+	@echo -e "\n\nrunning test_sh"
 	./test_sh
-	@echo "\n"
+	@echo -e "\n"
 
 compile_tests: clean ${OBJ}
 	@echo "compiling tests"
