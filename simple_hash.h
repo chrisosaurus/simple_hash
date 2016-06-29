@@ -154,4 +154,4 @@ void * sh_get(const struct sh_table *table, const char *key);
 void *  sh_delete(struct sh_table *table, const char *key);
 
 
-#endif // ifndef SIMPLE_HASH_H
+#endif /* ifndef SIMPLE_HASH_H */
