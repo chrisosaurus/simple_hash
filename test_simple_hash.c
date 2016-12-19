@@ -247,7 +247,7 @@ void set(void){
     puts("testing update via set");
 
     puts("two update");
-    assert(sh_set(table, key_2, &new_data_2));
+    assert( sh_set(table, key_2, &new_data_2) );
     data = sh_get(table, key_2);
     assert(data);
     assert( *data == new_data_2 );
@@ -258,7 +258,7 @@ void set(void){
     assert( *data == new_data_2 );
 
     puts("three update");
-    assert(sh_set(table, key_3, &new_data_3));
+    assert( sh_set(table, key_3, &new_data_3) );
     data = sh_get(table, key_3);
     assert(data);
     assert( *data == new_data_3 );
@@ -269,7 +269,7 @@ void set(void){
     assert( *data == new_data_3 );
 
     puts("one update");
-    assert(sh_set(table, key_1, &new_data_1));
+    assert( sh_set(table, key_1, &new_data_1) );
     data = sh_get(table, key_1);
     assert(data);
     assert( *data == new_data_1 );
