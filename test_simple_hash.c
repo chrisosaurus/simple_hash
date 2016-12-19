@@ -807,6 +807,11 @@ void error_handling(void){
     /* cannot update if doesn't already exist */
     assert( 0 == sh_update(table, key_3, &data_3) );
 
+    /* sh_set */
+    puts("testing sh_set");
+    assert( 0 == sh_set(0, key_1, &data_1) );
+    assert( 0 == sh_set(table, 0, &data_1) );
+
     /* sh_get */
     puts("testing sh_get");
     assert( 0 == sh_get(0, key_1) );
