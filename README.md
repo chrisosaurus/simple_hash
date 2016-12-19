@@ -51,7 +51,10 @@ Example usage
         sh_delete(t, "world");
 
         /* mutate existing data */
-        sh_set(t, "hello", &data_2);
+        sh_update(t, "hello", &data_2);
+
+        /* insert or update as need be */
+        sh_set(t, "boop", &data_2);
 
         /* check a key exists */
         if( sh_exists(t, "hello") ){
