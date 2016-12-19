@@ -83,7 +83,7 @@ void new_insert_get_destroy(void){
     puts("success!");
 }
 
-void set(void){
+void update(void){
     /* our simple hash table */
     struct sh_table *table = 0;
 
@@ -106,7 +106,7 @@ void set(void){
     /* temporary data pointer used for testing get */
     int *data = 0;
 
-    puts("\ntesting set functionality");
+    puts("\ntesting update functionality");
 
     puts("creating table");
     table = sh_new(32);
@@ -143,13 +143,13 @@ void set(void){
     assert( data_3 == *data );
 
 
-    puts("testing set");
-    puts("testing set failure for non-existing key");
-    data = sh_set(table, "foobarr", &data_1);
+    puts("testing update");
+    puts("testing update failure for non-existing key");
+    data = sh_update(table, "foobarr", &data_1);
     assert( 0 == data );
 
-    puts("two set");
-    data = sh_set(table, key_2, &new_data_2);
+    puts("two update");
+    data = sh_update(table, key_2, &new_data_2);
     assert(data);
     assert( *data == data_2 );
     assert( 3 == sh_nelems(table) );
@@ -158,8 +158,8 @@ void set(void){
     assert(data);
     assert( *data == new_data_2 );
 
-    puts("three set");
-    data = sh_set(table, key_3, &new_data_3);
+    puts("three update");
+    data = sh_update(table, key_3, &new_data_3);
     assert(data);
     assert( *data == data_3 );
     assert( 3 == sh_nelems(table) );
@@ -168,8 +168,8 @@ void set(void){
     assert(data);
     assert( *data == new_data_3 );
 
-    puts("one set");
-    data = sh_set(table, key_1, &new_data_1);
+    puts("one update");
+    data = sh_update(table, key_1, &new_data_1);
     assert(data);
     assert( *data == data_1 );
     assert( 3 == sh_nelems(table) );
@@ -699,12 +699,12 @@ void error_handling(void){
     /* cannot insert if already exists */
     assert( 0 == sh_insert(table, key_1, &data_1) );
 
-    /* sh_set */
-    puts("testing sh_set");
-    assert( 0 == sh_set(0, key_1, &data_1) );
-    assert( 0 == sh_set(table, 0, &data_1) );
-    /* cannot set if doesn't already exist */
-    assert( 0 == sh_set(table, key_3, &data_3) );
+    /* sh_update */
+    puts("testing sh_update");
+    assert( 0 == sh_update(0, key_1, &data_1) );
+    assert( 0 == sh_update(table, 0, &data_1) );
+    /* cannot update if doesn't already exist */
+    assert( 0 == sh_update(table, key_3, &data_3) );
 
     /* sh_get */
     puts("testing sh_get");
@@ -769,7 +769,7 @@ int internal(void){
 int main(void){
     new_insert_get_destroy();
 
-    set();
+    update();
 
     delete();
 

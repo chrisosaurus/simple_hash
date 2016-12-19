@@ -684,23 +684,24 @@ unsigned int sh_insert(struct sh_table *table, const char *key, void *data){
     return 1;
 }
 
-/* set `data` under `key`
+/* update `data` under `key`
+ *
  * this will only succeed if sh_exists(table, key)
  *
  * returns old data on success
  * returns 0 on failure
  */
-void * sh_set(struct sh_table *table, const char *key, void *data){
+void * sh_update(struct sh_table *table, const char *key, void *data){
     struct sh_entry *she = 0;
     void * old_data = 0;
 
     if( ! table ){
-        puts("sh_set: table undef");
+        puts("sh_update: table undef");
         return 0;
     }
 
     if( ! key ){
-        puts("sh_set: key undef");
+        puts("sh_update: key undef");
         return 0;
     }
 
@@ -721,6 +722,49 @@ void * sh_set(struct sh_table *table, const char *key, void *data){
 
     /* return old data */
     return old_data;
+}
+
+/* set `data` under `key`
+ *
+ * this will perform either an insert or an update
+ * depending on if the key already exists
+ *
+ * returns 1 on success
+ * returns 0 on failure
+ */
+unsigned int sh_set(struct sh_table *table, const char *key, void *data){
+    if( ! table ){
+        puts("sh_set: table undef");
+        return 0;
+    }
+
+    if( ! key ){
+        puts("sh_set: key undef");
+        return 0;
+    }
+
+    /* minor technical debt here:
+     * sh_exists calls sh_find_entry
+     * sh_update calls sh_find_entry
+     * sh_insert calls find sh_exists, which then calls sh_find_entry
+     *
+     * so we either end up with either:
+     *   1 call to sh_exists, 2 calls to sh_find_entry
+     *   2 calls to sh_exists, 2 calls to sh_find_entry
+     */
+    if( sh_exists(table, key) ){
+        if( !sh_update(table, key, data) ){
+            puts("sh_set: call to sh_update failed");
+            return 0;
+        }
+    } else {
+        if( !sh_insert(table, key, data) ){
+            puts("sh_set: call to sh_insert failed");
+            return 0;
+        }
+    }
+
+    return 1;
 }
 
 /* get `data` stored under `key`

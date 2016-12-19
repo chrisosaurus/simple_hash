@@ -131,13 +131,24 @@ unsigned int sh_exists(const struct sh_table *table, const char *key);
  */
 unsigned int sh_insert(struct sh_table *table, const char *key, void *data);
 
-/* set `data` under `key`
+/* update `data` under `key`
+ *
  * this will only succeed if sh_exists(table, key)
  *
  * returns old data on success
  * returns 0 on failure
  */
-void * sh_set(struct sh_table *table, const char *key, void *data);
+void * sh_update(struct sh_table *table, const char *key, void *data);
+
+/* set `data` under `key`
+ *
+ * this will perform either an insert or an update
+ * depending on if the key already exists
+ *
+ * returns 1 on success
+ * returns 0 on failure
+ */
+unsigned int sh_set(struct sh_table *table, const char *key, void *data);
 
 /* get `data` stored under `key`
  *
