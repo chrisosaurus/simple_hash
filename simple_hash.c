@@ -753,12 +753,12 @@ unsigned int sh_set(struct sh_table *table, const char *key, void *data){
      *   2 calls to sh_exists, 2 calls to sh_find_entry
      */
     if( sh_exists(table, key) ){
-        if( !sh_update(table, key, data) ){
+        if( ! sh_update(table, key, data) ){
             puts("sh_set: call to sh_update failed");
             return 0;
         }
     } else {
-        if( !sh_insert(table, key, data) ){
+        if( ! sh_insert(table, key, data) ){
             puts("sh_set: call to sh_insert failed");
             return 0;
         }
