@@ -164,5 +164,25 @@ void * sh_get(const struct sh_table *table, const char *key);
  */
 void * sh_delete(struct sh_table *table, const char *key);
 
+/* iterate through all key/value pairs in this hash table
+ * calling the provided function on each pair.
+ *
+ * the function is allowed to modify the value but cannot modify the key.
+ * the function should not access the hashtable in anyway including:
+ *  modifying the hash function other than through the value pointer given
+ *  calling any other hash table functions
+ *
+ * the function will be given the value of the `state` pointer for each call,
+ * this is useful for passing state between calls to the function as well as
+ * for returning results
+ *
+ * the function should return
+ *  1 if it wants the iteration to continue
+ *  0 if it wants the iteration to stop
+ *
+ * returns 1 on success
+ * returns 0 on success
+ */
+unsigned int sh_iterate(struct sh_table *table, void *state, unsigned int (*each)(void *state, const char *key, void **data));
 
 #endif /* ifndef SIMPLE_HASH_H */

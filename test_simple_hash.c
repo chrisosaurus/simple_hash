@@ -1,4 +1,4 @@
-/*  gcc simple_hash.c test_simple_hash.c -Wall -Wextra -Werror -o test_sh
+/*  gcc simple_hash.c test_simple_hash.c -wall -wextra -werror -o test_sh
  * ./test_sh
  */
 #include <assert.h> /* assert */
@@ -825,6 +825,13 @@ void error_handling(void){
     /* cannot delete a non-existent key */
     assert( 0 == sh_delete(table, key_3) );
 
+    /* sh_iterate */
+    puts("testing sh_iterate");
+    /* fail on table undef */
+    assert( 0 == sh_iterate(0, 0, 0) );
+    /* fail on function undef */
+    assert( 0 == sh_iterate(table, 0, 0) );
+
     /* sh_destroy */
     assert( 0 == sh_destroy(0, 1, 0) );
 
@@ -872,6 +879,86 @@ int internal(void){
     puts("success!");
 }
 
+/* function used by our iterate test below */
+unsigned int iterate_sum(void *state, const char *key, void **data){
+    unsigned int *state_int = 0;
+    unsigned int **data_int = 0;
+
+    if( ! state ){
+        puts("iterate_each: state undef");
+        assert(0);
+    }
+
+    if( ! key ){
+        puts("iterate_each: key undef");
+        assert(0);
+    }
+
+    if( ! data ){
+        puts("iterate_each: data undef");
+        assert(0);
+    }
+
+    state_int = state;
+    data_int = (unsigned int **) data;
+
+    *state_int += **data_int;
+
+    printf("saw pair ('%s': '%u')\n", key, **data_int);
+
+    return 1;
+}
+
+void iteration(void){
+    /* our simple hash table */
+    struct sh_table *table = 0;
+
+    /* some keys */
+    char *key_1 = "rhubarb";
+    char *key_2 = "carrot";
+    char *key_3 = "potato";
+
+    /* some data */
+    unsigned int data_1 = 3;
+    unsigned int data_2 = 5;
+    unsigned int data_3 = 7;
+
+    /* the sum value we pass to our iterate function */
+    unsigned int sum = 0;
+    /* our expected answer */
+    unsigned int expected_sum = data_1 + data_2 + data_3;
+
+
+    puts("\ntesting iteration functionality");
+
+    puts("creating table");
+    table = sh_new(32);
+    assert(table);
+    assert( 32 == table->size );
+    assert( 0 == sh_nelems(table) );
+
+
+    puts("inserting some data");
+    assert( sh_insert(table, key_1, &data_1) );
+    assert( 1 == sh_nelems(table) );
+    assert( sh_insert(table, key_2, &data_2) );
+    assert( 2 == sh_nelems(table) );
+    assert( sh_insert(table, key_3, &data_3) );
+    assert( 3 == sh_nelems(table) );
+
+    puts("testing iteration");
+    assert( sh_iterate(table, &sum, iterate_sum) );
+    if( sum != expected_sum ){
+        printf("iteration failed: expected sum '%u' but got '%u'\n",
+            expected_sum,
+            sum);
+        assert( sum == expected_sum );
+    }
+
+    assert( sh_destroy(table, 1, 0) );
+    puts("success!");
+}
+
 int main(void){
     new_insert_get_destroy();
 
@@ -890,6 +977,8 @@ int main(void){
     error_handling();
 
     internal();
+
+    iteration();
 
     puts("\noverall testing success!");
 

@@ -895,4 +895,62 @@ void * sh_delete(struct sh_table *table, const char *key){
     return 0;
 }
 
+/* iterate through all key/value pairs in this hash table
+ * calling the provided function on each pair.
+ *
+ * the function is allowed to modify the value but cannot modify the key.
+ * the function should not access the hashtable in anyway including:
+ *  modifying the hash function other than through the value pointer given
+ *  calling any other hash table functions
+ *
+ * the function will be given the value of the `state` pointer for each call,
+ * this is useful for passing state between calls to the function as well as
+ * for returning results
+ *
+ * the function should return
+ *  1 if it wants the iteration to continue
+ *  0 if it wants the iteration to stop
+ *
+ * returns 1 on success
+ * returns 0 on success
+ */
+unsigned int sh_iterate(struct sh_table *table, void *state, unsigned int (*each)(void *state, const char *key, void **data)){
+    /* current index into table we are considering */
+    unsigned int i = 0;
+    unsigned int len = 0;
+    /* current entry within bucket we are considering */
+    struct sh_entry *entry = 0;
+    /* return value from user supplied function */
+    unsigned int ret = 0;
+
+    if( ! table ){
+        puts("sh_iterate: table undef");
+        return 0;
+    }
+
+    if( ! each ){
+        puts("sh_iterate: each undef");
+        return 0;
+    }
+
+    len = table->size;
+    /* go through each entry in table */
+    for( i=0; i<len; ++i ){
+        entry = table->entries[i];
+
+        /* go through each entry within bucket calling user supplied function */
+        while( entry ){
+            ret = each(state, entry->key, &(entry->data));
+
+            if( ret == 0 ){
+                /* user function signalled to stop, returning */
+                return 1;
+            }
+
+            entry = entry->next;
+        }
+    }
+
+    return 1;
+}
 
