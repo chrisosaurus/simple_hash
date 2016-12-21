@@ -72,3 +72,77 @@ Example usage
         return 0;
     }
 
+Internal implementation
+-----------------------
+
+Simple hash is an unhardened chaining hash.
+
+Every incoming key is first hashed, this hash is then taken and modulo-d to find
+an appropriate bucket for it, each bucket contains a pointer to an entry.
+
+So each bucket is one of:
+
+ - null - which means this bucket is empty
+ - the head of a linked list of items that all belong in this bucket
+
+Simple hash will not automatically resize when it becomes loaded,
+but an `sh_resize` function is provided for this (which will automatically
+rehash all items).
+
+It is expected that in the future simple hash will automatically resize itself 
+based on loading.
+
+Simple hash is not hardened and so is not recommended for use cases which would
+expose it to attackers.
+
+A rough diagram of the internals of how a simple hash of size 8 would look:
+
+      sh_table
+    size    = 8
+    n_elems = 4
+    entries = *
+              |
+              v
+              [ 0 | * | 0 | 0 | 0 | 0 | * | 0 ]
+                    |                   |
+                    |                   v
+                    |                   sh_entry
+                    |                 hash = Z
+                    |                 key  = *
+                    |                 data = *
+                    |                 next = 0
+                    v
+                    sh_entry
+                  hash = X
+                  key  = *
+                  data = *
+                  next = *
+                        /
+                       /
+                      /
+                     /
+                    v
+                    sh_entry
+                  hash = X
+                  key  = *
+                  data = *
+                  next = v
+                        /
+                       /
+                      /
+                     /
+                    v
+                    sh_entry
+                  hash = Y
+                  key  = *
+                  data = *
+                  next = 0
+
+Here we can see an sh_table of size 8 containing 4 entries.
+
+3 of those entries have landed in the same bucket of [1].
+Of those 3, two have collided on the hash 'X' (but have different keys),
+this means that `X % 8 == Y % 8 == 1`
+
+We also have a single item in bucket [6], so we know `Z % 8 == 6`.
+
