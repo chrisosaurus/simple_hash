@@ -1,5 +1,5 @@
 # Simple hash [![Build Status](https://travis-ci.org/mkfifo/simple_hash.svg)](https://travis-ci.org/mkfifo/simple_hash) [![Coverage Status](https://coveralls.io/repos/mkfifo/simple_hash/badge.svg?branch=master)](https://coveralls.io/r/mkfifo/simple_hash?branch=master) <a href="https://scan.coverity.com/projects/4851"> <img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/4851/badge.svg"/> </a>
-A simple implementation of a chaining hash table written in pure C99 with no external dependencies
+A simple implementation of an unordered chaining hash table written in pure C99 with no external dependencies
 
 Simple hash is licensed under the MIT license, see LICENSE for more details
 
@@ -75,7 +75,7 @@ Example usage
 Internal implementation
 -----------------------
 
-Simple hash is an unhardened chaining hash.
+Simple hash is an unhardened unordered chaining hash.
 
 Every incoming key is first hashed, this hash is then taken and modulo-d to find
 an appropriate bucket for it, each bucket contains a pointer to an entry.
