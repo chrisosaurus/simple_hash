@@ -1,5 +1,9 @@
 TODO
 
+* port over search centralisation commit from linear_hash
+
+* profile original vs centalised
+
 * Consider automatically resizing based on loading factor (as linear hash does)
 
 * lines we can get via manipulative unit tests (see linear hash)
